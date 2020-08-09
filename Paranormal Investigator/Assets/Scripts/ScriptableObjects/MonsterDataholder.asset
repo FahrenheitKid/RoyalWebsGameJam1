@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53550734dbdf7a74fb6efb7d87fb550a, type: 3}
+  m_Name: MonsterDataholder
+  m_EditorClassIdentifier: 
+  monsterList:
+  - monster: 0
+    hasHands: 0
+    hasFeet: 0
+  - monster: 1
+    hasHands: 1
+    hasFeet: 1
+  - monster: 2
+    hasHands: 0
+    hasFeet: 1
+  - monster: 3
+    hasHands: 0
+    hasFeet: 1
+  - monster: 3
+    hasHands: 0
+    hasFeet: 1
+  - monster: 5
+    hasHands: 1
+    hasFeet: 1
+  - monster: 6
+    hasHands: 1
+    hasFeet: 0
+  - monster: 7
+    hasHands: 1
+    hasFeet: 1
+  - monster: 8
+    hasHands: 0
+    hasFeet: 0
+  - monster: 9
+    hasHands: 0
+    hasFeet: 0
+  - monster: 10
+    hasHands: 0
+    hasFeet: 0
+  - monster: 11
+    hasHands: 0
+    hasFeet: 0
+  - monster: 12
+    hasHands: 0
+    hasFeet: 1
+  - monster: 13
+    hasHands: 0
+    hasFeet: 0
+  - monster: 14
+    hasHands: 1
+    hasFeet: 0
+  - monster: 15
+    hasHands: 1
+    hasFeet: 0
+  - monster: 16
+    hasHands: 0
+    hasFeet: 1
+  - monster: 17
+    hasHands: 0
+    hasFeet: 1
+  - monster: 18
+    hasHands: 0
+    hasFeet: 1
+  - monster: 19
+    hasHands: 0
+    hasFeet: 1
+  - monster: 20
+    hasHands: 0
+    hasFeet: 1
+  - monster: 21
+    hasHands: 0
+    hasFeet: 1
+  - monster: 22
+    hasHands: 0
+    hasFeet: 1
+  - monster: 23
+    hasHands: 0
+    hasFeet: 0
+  - monster: 24
+    hasHands: 1
+    hasFeet: 1
+  - monster: 25
+    hasHands: 0
+    hasFeet: 1
+  - monster: 26
+    hasHands: 0
+    hasFeet: 0
+  - monster: 27
+    hasHands: 1
+    hasFeet: 1
+  - monster: 28
+    hasHands: 1
+    hasFeet: 1
+  - monster: 29
+    hasHands: 1
+    hasFeet: 1
+  - monster: 30
+    hasHands: 1
+    hasFeet: 0

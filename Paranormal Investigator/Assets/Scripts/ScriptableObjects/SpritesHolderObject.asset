@@ -1,0 +1,151 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f5a02ad6fdf64d429a4f541645fc5fe, type: 3}
+  m_Name: SpritesHolderObject
+  m_EditorClassIdentifier: 
+  airSlime:
+    sprite: {fileID: 7518315683484351656, guid: b2656432af10f644cb9c116db99e34a2, type: 3}
+    animator: {fileID: 22100000, guid: b3074ed53eb84e34f828b80e19fa6697, type: 2}
+  earthKoala:
+    sprite: {fileID: -6714512614828155352, guid: 1d7cd734840c76344bbd869d698cb461, type: 3}
+    animator: {fileID: 0}
+  earthGoomba:
+    sprite: {fileID: -750876277562190473, guid: f141dd453a119814eaaf9da5c7e5a2e7, type: 3}
+    animator: {fileID: 0}
+  earthTrunk:
+    sprite: {fileID: -3577478761172276580, guid: 8fbee47e59c09dd45baf02b81cc77f1f, type: 3}
+    animator: {fileID: 0}
+  earthTree:
+    sprite: {fileID: -7803868530101275431, guid: 49ba1795b15e43140b2f2f636d4291ac, type: 3}
+    animator: {fileID: 0}
+  earthGolem:
+    sprite: {fileID: 7557751631982109549, guid: 0ba2dc58e2d6a4e4892a073a9753f1d3, type: 3}
+    animator: {fileID: 0}
+  earthPumpkin:
+    sprite: {fileID: -5049444968750925908, guid: c4d06654ebb329d43bed5945526318a3, type: 3}
+    animator: {fileID: 0}
+  earthling:
+    sprite: {fileID: 3289799939252037283, guid: c480ec5377b177a4c85f1112bbaf9c92, type: 3}
+    animator: {fileID: 0}
+  earthKing:
+    sprite: {fileID: -4194625136788765861, guid: fa517d4b28b603249b0438d227ef0219, type: 3}
+    animator: {fileID: 0}
+  FireSlime:
+    sprite: {fileID: 5897538341832353843, guid: a06250f66c6fd504eb8caf490b06577d, type: 3}
+    animator: {fileID: 0}
+  fireSlima:
+    sprite: {fileID: 1860378669851690261, guid: 413780aacb808094583af7ba1a7cc2d6, type: 3}
+    animator: {fileID: 0}
+  fireSlimaga:
+    sprite: {fileID: -2284836724509633272, guid: f16274cde9899da4591e661ede947e3b, type: 3}
+    animator: {fileID: 0}
+  fireTank:
+    sprite: {fileID: 8715221140352330782, guid: 01dce0f18b98a094990bbd683481fc32, type: 3}
+    animator: {fileID: 0}
+  ghost:
+    sprite: {fileID: -7684389841996840255, guid: 70bdbf5c9682bf04d95dd2dc73a9e609, type: 3}
+    animator: {fileID: 0}
+  fireKing:
+    sprite: {fileID: -6551779922547999137, guid: 7da20d9be1c202948a6594fbd98c1d1d, type: 3}
+    animator: {fileID: 0}
+  fireAlien:
+    sprite: {fileID: -6807779955771370568, guid: 3173b538fe93ab94eab8e9f61d65aad2, type: 3}
+    animator: {fileID: 0}
+  airBird:
+    sprite: {fileID: -7853281545805402564, guid: 999e3eb54f3807b4897aeb2b781d961e, type: 3}
+    animator: {fileID: 0}
+  airBirda:
+    sprite: {fileID: 8976353073554647925, guid: 8f45af9607c318b4db856959b11d6802, type: 3}
+    animator: {fileID: 0}
+  airBirdling:
+    sprite: {fileID: -3183345197945042456, guid: b7f6e27eb62fba34a93e401adf20d894, type: 3}
+    animator: {fileID: 0}
+  airBirdaga:
+    sprite: {fileID: -3775293951021299871, guid: b35b147c0abd3e04baf9d73233946a59, type: 3}
+    animator: {fileID: 0}
+  airEgg:
+    sprite: {fileID: -1706372323301438869, guid: 72507a4bef1d8e64eab337fb0ab04529, type: 3}
+    animator: {fileID: 0}
+  airBirdaja:
+    sprite: {fileID: -1004099411789305485, guid: e2cd33dd9a514da41bf121762fb33c00, type: 3}
+    animator: {fileID: 0}
+  airOwl:
+    sprite: {fileID: 6516205784169378935, guid: 87655231bea374b488eb7de6dfef020f, type: 3}
+    animator: {fileID: 0}
+  darkSlime:
+    sprite: {fileID: 7108324806527755228, guid: 1339759f1674aaa4fb74fc416074bbf4, type: 3}
+    animator: {fileID: 0}
+  darkPig:
+    sprite: {fileID: 2685726949527276499, guid: 880c0c2cf20ab0941b4898103e2b544b, type: 3}
+    animator: {fileID: 0}
+  darkBat:
+    sprite: {fileID: -8178060074281500187, guid: 6032243a19b2b5f478f7f8e79a5d515a, type: 3}
+    animator: {fileID: 0}
+  darkGhoul:
+    sprite: {fileID: -7311031705915155868, guid: fee377c05157e4d4ab5e42d30ffc6036, type: 3}
+    animator: {fileID: 0}
+  darkWizard:
+    sprite: {fileID: 2011436507179006003, guid: e77857e986628444d8d8bf898dbb0fc6, type: 3}
+    animator: {fileID: 0}
+  darkImp:
+    sprite: {fileID: 7458564499904050999, guid: 598f4152d52fb2d4cbf8bd0910ecc6e7, type: 3}
+    animator: {fileID: 0}
+  darkDemon:
+    sprite: {fileID: -3009501421585226413, guid: cec0ef9d4e00f7a419c30432b3e5e9f0, type: 3}
+    animator: {fileID: 0}
+  darkBrain:
+    sprite: {fileID: -1470005061747639898, guid: 241357a00a89907498a8702cdb46fe9e, type: 3}
+    animator: {fileID: 0}
+  hammer: {fileID: 21300000, guid: 55b550f4803d50544b7ff29752732a70, type: 3}
+  wrench: {fileID: 21300000, guid: 9fc6fc5b9d465054a9833132a8463757, type: 3}
+  backsaw: {fileID: 21300000, guid: 583ba2b635ae2b548ae00bca0d220bfc, type: 3}
+  scythe: {fileID: 21300000, guid: 6aa2433d7dbb00d4fb2da227fcfb375f, type: 3}
+  shovel: {fileID: 21300000, guid: b18d0e2e77cb1954d8da0f5381f2a18a, type: 3}
+  pitchfork: {fileID: 21300000, guid: 97a8259de2aa0244888ab390e6bb5c51, type: 3}
+  knife: {fileID: 21300000, guid: f6e54d65413cc2e46a8bf5b276196ef5, type: 3}
+  crowbar: {fileID: 21300000, guid: 14ac337dea8e3574294a922aa291abe0, type: 3}
+  screwdriver: {fileID: 21300000, guid: 2b1310aef31d6be47ae84154d0f35c32, type: 3}
+  axe: {fileID: 21300000, guid: ff50707bef348544baec1c4c650b1fae, type: 3}
+  cleaver: {fileID: 21300000, guid: 818113c4251e78a4fadf27765761a099, type: 3}
+  utilityKnife: {fileID: 21300000, guid: 37a505cf2b60226409968dc764fa63ff, type: 3}
+  duster: {fileID: 21300000, guid: 30f3bec542b7b2140a3346e3567c4472, type: 3}
+  pickaxe: {fileID: 21300000, guid: f4a698d4cd4d9af43ba4a223f2b77fc6, type: 3}
+  wateringCan: {fileID: 21300000, guid: 6b3a0078d0e7f594c919029b73f31bd3, type: 3}
+  cultivator: {fileID: 21300000, guid: fec50a2b4b584f04bafcefa32821c205, type: 3}
+  pliers: {fileID: 21300000, guid: 0a8208156976ac24b96ea33e470876ce, type: 3}
+  broom: {fileID: 21300000, guid: 02f5dda1408be6640a6f26ff5faeb4f2, type: 3}
+  scraper: {fileID: 21300000, guid: 74511bb85e1eda94a9f2ff80d958c535, type: 3}
+  pipeWrench: {fileID: 21300000, guid: 0f0608ba293b4b94fa86e22e80e5d96e, type: 3}
+  tapeMeasure: {fileID: 21300000, guid: 6a8bd24eedc2b804494e63cf334d3def, type: 3}
+  gouge: {fileID: 21300000, guid: dc187ee493601d247abe6a8d8e2533c5, type: 3}
+  house: {fileID: -2658988011691089390, guid: 575453be86b3efb43827a908484269be, type: 3}
+  barn: {fileID: -1392469404639622424, guid: 575453be86b3efb43827a908484269be, type: 3}
+  building: {fileID: -4798782649293942706, guid: 575453be86b3efb43827a908484269be, type: 3}
+  stadium: {fileID: -1581112284054438290, guid: 575453be86b3efb43827a908484269be, type: 3}
+  gasStation: {fileID: 5475529567137072537, guid: 575453be86b3efb43827a908484269be, type: 3}
+  shop: {fileID: 3495567261648030709, guid: 575453be86b3efb43827a908484269be, type: 3}
+  bank: {fileID: 2562560361787281390, guid: 575453be86b3efb43827a908484269be, type: 3}
+  hospital: {fileID: -3982921528987352209, guid: 575453be86b3efb43827a908484269be, type: 3}
+  port: {fileID: 2910676978160791410, guid: 575453be86b3efb43827a908484269be, type: 3}
+  airport: {fileID: 4224418760902754027, guid: 575453be86b3efb43827a908484269be, type: 3}
+  busStop: {fileID: 4621774531170541385, guid: 575453be86b3efb43827a908484269be, type: 3}
+  warehouse: {fileID: 8185937610858705556, guid: 575453be86b3efb43827a908484269be, type: 3}
+  theater: {fileID: 2441485587129617367, guid: 575453be86b3efb43827a908484269be, type: 3}
+  church: {fileID: -8789677095956632096, guid: 575453be86b3efb43827a908484269be, type: 3}
+  graveyard: {fileID: -408641183659577687, guid: 575453be86b3efb43827a908484269be, type: 3}
+  factory: {fileID: -1017102301563770442, guid: 575453be86b3efb43827a908484269be, type: 3}
+  nuclearPlant: {fileID: -2859329255844019877, guid: 575453be86b3efb43827a908484269be, type: 3}
+  castle: {fileID: -6990752631345352858, guid: 575453be86b3efb43827a908484269be, type: 3}
+  park: {fileID: 7424703507596353603, guid: 575453be86b3efb43827a908484269be, type: 3}
+  lighthouse: {fileID: 624039399399663256, guid: 575453be86b3efb43827a908484269be, type: 3}
+  windmill: {fileID: 6267583182762089412, guid: 575453be86b3efb43827a908484269be, type: 3}
+  vulcan: {fileID: 753130867210143568, guid: 575453be86b3efb43827a908484269be, type: 3}
