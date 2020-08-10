@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Common.Enums;
+using DG.Tweening;
+using TMPro;
 
 public class Game : MonoBehaviour
 {
@@ -31,6 +33,44 @@ public class Game : MonoBehaviour
     bool useCustomCursor;
       public GameObject placePrefab;
       public GameObject weaponPrefab;
+      [SerializeField]
+      FlexibleGridLayout monsterGridGroup;
+      [SerializeField]
+      public Color greenColor;
+      [SerializeField]
+      public Color redColor;
+      [SerializeField]
+      public Color brownColor;
+
+      [Header("Game Logic")]
+
+      [SerializeField]
+      int dayCount = 1;
+        [SerializeField]
+        bool hasSacrificed = false;
+        [SerializeField]
+        public bool isSacrificeMode =false;
+        [SerializeField]
+        Button sacrificeModeButton;
+        [SerializeField]
+        TextMeshProUGUI sacrificeButtonText;
+        [SerializeField]
+        Material [] sacrificeTextMats;
+        [SerializeField]
+        public bool isPaused = false;
+
+        [SerializeField]
+        List<Monster> monsters = new List<Monster>();
+        [SerializeField]
+        Monster assassin;
+        [SerializeField]
+         Monster currentSacrifice;
+         [SerializeField]
+         int questionMAX;
+         [SerializeField]
+         int questionCount;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -47,11 +87,86 @@ public class Game : MonoBehaviour
         {
             Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
         }
+
+        foreach(Transform child in monsterGridGroup.transform)
+        {
+            Monster m = child.GetComponent<Monster>();
+
+
+            if(m) 
+            {
+                monsters.Add(m);
+            }
+        }
+
+        assassin = monsters[Random.Range(0,monsters.Count)];
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void NightTurn()
+    {
+        isPaused = true;
+    }
+
+    public void DayReveal()
+    {
+
+        isPaused = false;
+    }
+
+     public static Tween FadeImage(Image image, bool on, float fadeDuration, Vector2 normalPosition, bool forceReposition = false)
+    {
+
+         image.DOFade(on ? 1 : 0, fadeDuration);
+
+         if(forceReposition)
+         {
+             
+              image.rectTransform.localPosition = (on) ?  new Vector2(normalPosition.x,normalPosition.y - 50f) : normalPosition;
+         }
+        
+    return image.rectTransform.DOLocalMove(on ? normalPosition : new Vector2(normalPosition.x,normalPosition.y - 50f), fadeDuration);
+        
+    }
+
+    public static Tween FadeGroup(CanvasGroup image, bool on, float fadeDuration, float normalY =0)
+    {
+
+         image.DOFade(on ? 1 : 0, fadeDuration);
+    
+        return image.transform.DOLocalMoveY(on ? normalY :normalY - 50f, fadeDuration);
+        
+    }
+
+    public void SetSacrifice(Monster m)
+    {
+        if(currentSacrifice == m && m != null)
+        {
+            currentSacrifice.Sacrifice(false);
+            currentSacrifice = null;
+        }
+        else
+        {
+            if(currentSacrifice)
+            currentSacrifice.Sacrifice(false);
+            currentSacrifice = m;
+             if(currentSacrifice)
+            currentSacrifice.Sacrifice(true);
+        }
+
+    }
+
+    public void SetSacrificeMode()
+    {
+        isSacrificeMode = !isSacrificeMode;
+        sacrificeButtonText.material = (isSacrificeMode) ? sacrificeTextMats.FirstOrDefault() : sacrificeTextMats.LastOrDefault();
+        sacrificeButtonText.color = (isSacrificeMode)  ? Color.black : brownColor;
+        sacrificeButtonText.text = (isSacrificeMode) ? "Sacrifice Mode ON" : "Sacrifice Mode OFF";
+        sacrificeModeButton.image.color = (isSacrificeMode) ? redColor : Color.white;
     }
 }

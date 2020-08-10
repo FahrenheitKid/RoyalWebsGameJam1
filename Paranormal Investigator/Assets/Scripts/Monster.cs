@@ -111,6 +111,8 @@ namespace Common.Enums
 public class Monster : MonoBehaviour
 {
     [SerializeField]
+    public Game game_ref;
+    [SerializeField]
     Button button;
      [SerializeField]
     Image image;
@@ -122,6 +124,15 @@ public class Monster : MonoBehaviour
     TextMeshProUGUI title;
     [SerializeField]
     Image titlePanel;
+
+    [SerializeField]
+    CanvasGroup questionMark;
+    [SerializeField]
+    CanvasGroup exclamationMark;
+    [SerializeField]
+    CanvasGroup talkBubble;
+    [SerializeField]
+    TextRevealer talkText;
      [SerializeField]
     Animator animator;
      [SerializeField]
@@ -144,6 +155,11 @@ public class Monster : MonoBehaviour
 
     public bool useFade = true;
 
+    public bool isSacrifice = false;
+    public bool isDead = false;
+    public bool wasAsked = false;
+    public bool wasInterrogated = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -153,7 +169,8 @@ public class Monster : MonoBehaviour
     public void Setup()
     {
        
-        
+        if(!game_ref)
+        game_ref = GameObject.FindGameObjectWithTag("Game").GetComponent<Game>();
 
         if(spritesHolder)
         {
@@ -246,6 +263,104 @@ public class Monster : MonoBehaviour
     {
         infoGroup.DOFade(on ? 1 : 0, infoShowDuration);
         infoGroup.transform.DOLocalMoveY(on ? 0 : -50f, infoShowDuration);
+    }
+
+    public void ShowQuestionMark(bool on)
+    {
+        //Game.FadeImage(questionMark,on,infoShowDuration, Vector2.zero);
+        questionMark.DOFade(on ? 1 : 0, infoShowDuration);
+        questionMark.transform.DOLocalMoveY(on ? 0 : -50f, infoShowDuration);
+    }
+
+     public void ShowExclamationMark(bool on)
+    {
+         exclamationMark.DOFade(on ? 1 : 0, infoShowDuration);
+        exclamationMark.transform.DOLocalMoveY(on ? 0 : -50f, infoShowDuration);
+    }
+
+    public void ShowTalkBubble(bool on)
+    {
+        Tween t = Game.FadeGroup(talkBubble,on,infoShowDuration);
+        if(on)
+        {   
+            Queue<string> queue = new Queue<string>();
+            queue.Enqueue(GetRandomSacrificeText());
+            queue.Enqueue(GetRandomSacrificeText());
+            talkText.SetQueue(queue);
+            
+        t.onComplete+= () => talkText.RevealText();
+        }
+        else
+        t.onComplete+= () => talkText.StopRevealing();
+    }
+
+   
+    public void SetSacrifice()
+    {
+        if(game_ref)
+        {
+            game_ref.SetSacrifice(this);
+        }
+    }
+    public void Sacrifice(bool on)
+    {
+        if(isDead && on)
+        {
+            print("cant be accused");
+            return;
+        }
+        else
+        {
+            ShowExclamationMark(on);
+            ShowTalkBubble(on);
+            if(!on)
+            ShowQuestionMark(false);
+            isSacrifice = on;
+        }
+    }
+
+
+    public void ActionClick()
+    {
+        if(isDead == false )
+        {
+            if(game_ref.isSacrificeMode == true)
+            {
+                 SetSacrifice();
+            }
+            else
+            {
+                if(wasAsked == false)
+                {
+                    Ask();
+                   
+                }
+            }   
+           
+        }
+        else 
+        {
+            
+        }
+    }
+
+
+    public void Ask()
+    {
+         wasAsked = true;
+          ShowQuestionMark(false);
+          ShowBasicInfo(true);
+    }
+
+    public string GetRandomSacrificeText()
+    {
+        List<string> sacrificeTexts = new List<string> {
+            "Don't kill me please!!!1!",
+            "Do you always solve your cases by randonly killing people?",
+            "If you kill me, I'll wait for you in hell (:"
+        };
+
+        return sacrificeTexts[Random.Range(0, sacrificeTexts.Count)];
     }
 
 

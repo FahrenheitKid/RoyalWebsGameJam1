@@ -28,8 +28,28 @@ public class MonsterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if(monster)
         {
-            if(monster.useFade)
+            if(monster.useFade == false) return;
+            
+             if(monster.wasAsked)
             monster.ShowBasicInfo(true);
+            else
+            {
+                monster.ShowQuestionMark(true);
+            }
+
+            if(monster.game_ref.isSacrificeMode == false)
+            {
+                
+            }
+            else
+            {
+
+            }
+
+            if(monster.isSacrifice)
+            {
+                monster.ShowTalkBubble(true);
+            }
         }
     }
 
@@ -37,8 +57,17 @@ public class MonsterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if(monster)
         {
-            if(monster.useFade)
+              if(monster.useFade == false) return;
+            if(monster.wasAsked)
             monster.ShowBasicInfo(false);
+
+            
+                monster.ShowQuestionMark(false);
+
+                
+                monster.ShowTalkBubble(false);
+            
+           
         }
     }
 

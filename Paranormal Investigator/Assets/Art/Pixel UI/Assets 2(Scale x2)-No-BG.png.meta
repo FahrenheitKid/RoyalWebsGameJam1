@@ -50,6 +50,12 @@ TextureImporter:
   - first:
       213: 3558730614562484101
     second: PatternPanel
+  - first:
+      213: 7319606511522438511
+    second: TalkBaloonRight
+  - first:
+      213: -7589481178486296395
+    second: TalkBaloonRightTip
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -329,7 +335,7 @@ TextureImporter:
         height: 109
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 29, y: 17, z: 17, w: 12}
+      border: {x: 20, y: 45, z: 17, w: 36}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -504,6 +510,27 @@ TextureImporter:
       bones: []
       spriteID: 58fed4493a6236130800000000000000
       internalID: 3558730614562484101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TalkBaloonRight
+      rect:
+        serializedVersion: 2
+        x: 1480
+        y: 1667
+        width: 212
+        height: 109
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 12, y: 17, z: 22, w: 13}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6d5eee5757749560800000000000000
+      internalID: 7319606511522438511
       vertices: []
       indices: 
       edges: []
