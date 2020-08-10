@@ -149,3 +149,5 @@ MonoBehaviour:
   lighthouse: {fileID: 624039399399663256, guid: 575453be86b3efb43827a908484269be, type: 3}
   windmill: {fileID: 6267583182762089412, guid: 575453be86b3efb43827a908484269be, type: 3}
   vulcan: {fileID: 753130867210143568, guid: 575453be86b3efb43827a908484269be, type: 3}
+  placePrefab: {fileID: 2560064087930078803, guid: 9f7898a8416cb1043983fc382a3b0595, type: 3}
+  weaponPrefab: {fileID: 1116685607636504547, guid: cdc174b5379fc1149a67edea9dbce908, type: 3}

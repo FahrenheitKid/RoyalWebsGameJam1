@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Common.Enums;
 
 [System.Serializable]
@@ -168,6 +170,11 @@ public class SpritesHolder : ScriptableObject
         Sprite windmill;
         [SerializeField]
         Sprite vulcan;
+        [Header("Prefabs")]
+        [SerializeField]
+               GameObject placePrefab;
+               [SerializeField]
+       GameObject weaponPrefab;
 
 
     public MonsterSpriteAndAnimator GetMonsterSpriteAndAnimator(MonsterCharacter character)
@@ -345,5 +352,23 @@ public class SpritesHolder : ScriptableObject
         }
 
         return null;
+    }
+
+    public GameObject InstantiatePrefab(Place place)
+    {
+        
+        GameObject go =  Instantiate(placePrefab);
+        Image image = go.GetComponent<Image>();
+
+        image.sprite = GetSprite(place);
+        return image.gameObject;
+    }
+
+    public GameObject InstantiatePrefab(Weapon weapon)
+    {
+        Image image = Instantiate(weaponPrefab).GetComponent<Image>();
+
+        image.sprite = GetSprite(weapon);
+        return image.gameObject;
     }
 }

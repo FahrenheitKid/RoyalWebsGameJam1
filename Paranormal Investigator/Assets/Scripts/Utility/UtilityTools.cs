@@ -385,6 +385,18 @@ static public class UtilityTools
         return -1;
     }
 
+    public static List<int> GetUniqueRandomNumbers(int from,int to,int numberOfElement)
+{
+    if(Mathf.Abs(from - to) < numberOfElement) return null;
+
+    HashSet<int> numbers = new HashSet<int>();
+    while (numbers.Count < numberOfElement)
+    {
+        numbers.Add(Random.Range(from, to));
+    }
+    return numbers.ToList();
+}
+
     public static bool isPointInViewport(Vector3 screenPoint) // returns true if point is inside viewport
     {
         if (screenPoint.z > 0f && screenPoint.x > 0f && screenPoint.x < 1f && screenPoint.y > 0f && screenPoint.y < 1f)
