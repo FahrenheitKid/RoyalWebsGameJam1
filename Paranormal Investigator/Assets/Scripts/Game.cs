@@ -42,6 +42,14 @@ public class Game : MonoBehaviour
       [SerializeField]
       public Color brownColor;
 
+      [SerializeField]
+      public Color membersHighlightColor;
+      [SerializeField]
+      public Color weaponHighlightColor;
+       [SerializeField]
+      public Color placeHighlightColor;
+
+
       [Header("Game Logic")]
 
       [SerializeField]
@@ -70,6 +78,16 @@ public class Game : MonoBehaviour
          [SerializeField]
          int questionCount;
 
+         [SerializeField]
+         TextMeshProUGUI clockText;
+         [SerializeField]
+         int hours = 6;
+         [SerializeField]
+         float secondsPerHour = 20;
+         [SerializeField]
+         string ampm = "am";
+         [SerializeField]
+         Timer gameClock;
 
 
     // Start is called before the first frame update
@@ -99,7 +117,43 @@ public class Game : MonoBehaviour
             }
         }
 
-        assassin = monsters[Random.Range(0,monsters.Count)];
+       
+
+        gameClock = Timer.Register(secondsPerHour, () => {
+            
+                if(hours < 12)
+                {
+                    hours++;
+                    
+                }
+                else
+                {
+                   
+                    hours = 1;
+                    ampm = (ampm == "am") ? "pm" : "am";
+                     NightTurn();
+                     
+                }
+
+                UpdateClock();
+            
+            },null,true);
+
+            SetupNewRound();
+    }
+
+    public void SetupNewRound()
+    {
+         assassin = monsters[Random.Range(0,monsters.Count)];
+         
+
+
+         if(gameClock.isPaused)
+         {
+             hours = 6;
+            ampm = "am";
+             gameClock.Resume();
+         }
     }
 
     // Update is called once per frame
@@ -107,16 +161,47 @@ public class Game : MonoBehaviour
     {
         
     }
+ 
+    private void UpdateClock()
+    {
+        clockText.text =  (hours == 0) ? 12.ToString("00") :hours.ToString("00") + "" + /*minutes.ToString("00") + */ " " +  ampm;
+        
+    }
 
     public void NightTurn()
     {
         isPaused = true;
+        gameClock.Pause();
+       
+
+        if(hasSacrificed == false)
+        {
+            currentSacrifice = assassin;
+            while(currentSacrifice == assassin)
+            {
+                currentSacrifice = monsters[Random.Range(0,monsters.Count)];
+            }
+
+        }
+
+        currentSacrifice.Assassinate(assassin);
+        currentSacrifice = null;
+        hasSacrificed = false;
+
+
+        DayReveal();
+
     }
 
     public void DayReveal()
     {
 
         isPaused = false;
+         hours = 6;
+        ampm = "am"; 
+         gameClock.Resume();
+
+         print("A new day Has begun");
     }
 
      public static Tween FadeImage(Image image, bool on, float fadeDuration, Vector2 normalPosition, bool forceReposition = false)
@@ -168,5 +253,11 @@ public class Game : MonoBehaviour
         sacrificeButtonText.color = (isSacrificeMode)  ? Color.black : brownColor;
         sacrificeButtonText.text = (isSacrificeMode) ? "Sacrifice Mode ON" : "Sacrifice Mode OFF";
         sacrificeModeButton.image.color = (isSacrificeMode) ? redColor : Color.white;
+    }
+
+    public static string GetColoredString(string text, Color color)
+    {
+        ColorUtility.ToHtmlStringRGB(color);
+        return "<color=#" +  ColorUtility.ToHtmlStringRGB(color) +"> " + text + " </color>"; 
     }
 }

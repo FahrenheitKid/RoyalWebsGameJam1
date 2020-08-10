@@ -35,6 +35,15 @@ namespace Common.Enums
         TapeMeasure,
         Gouge
     }
+     public enum WeaponFeature
+    {
+        Blade,
+        Piercing,
+        Gardening,
+        Construction,
+        Harmless,
+        Blunt
+    }
 
     public enum Place
     {
@@ -63,12 +72,30 @@ namespace Common.Enums
 
     }
 
+    public enum PlaceFeature
+    {
+        Indoors,
+        Outdoors,
+        Busy,
+        Calm,
+        Common,
+    }
+
+   
+
     public enum Element
     {
         Earth,
         Fire,
         Air,
         Dark
+    }
+
+    public enum Question{
+
+        who,
+        where,
+        how
     }
     public enum MonsterCharacter
     {
@@ -105,9 +132,24 @@ namespace Common.Enums
         DarkBrain
 
     }
+
 }
 
+public struct Autopsy
+{
+    public Weapon weapon;
+    public Place place;
+    public MonsterCharacter character;
+    public bool deadAssassin;
 
+    public Autopsy(Weapon weapon, Place place, bool deadAssassin, MonsterCharacter character)
+    {
+        this.weapon = weapon;
+        this.place = place;
+        this.deadAssassin = deadAssassin;
+        this.character = character;
+    }
+}
 public class Monster : MonoBehaviour
 {
     [SerializeField]
@@ -146,12 +188,19 @@ public class Monster : MonoBehaviour
     List<Weapon> weapons = new List<Weapon>();
     [SerializeField]
     List<Place> places = new List<Place>();
+    [SerializeField]
+    Autopsy autopsy;
+    [SerializeField]
+    string answer;
+    [SerializeField]
 
     public static float titlePanelDefaultPaddingY = 70f;
     public static float infoPanelDefaultPaddingX = 200f;
     public static float infoShowDuration = 0.5f;
     [SerializeField]
     SpritesHolder spritesHolder;
+    [SerializeField]
+    MonsterDataObject monsterDataHolder;
 
     public bool useFade = true;
 
@@ -319,6 +368,19 @@ public class Monster : MonoBehaviour
         }
     }
 
+    public void Assassinate(Monster assassin)
+    {
+        autopsy.place = Random.value  <= 0.5 ? assassin.places[Random.Range(0,assassin.places.Count)] : places[Random.Range(0,places.Count)];
+        autopsy.weapon = assassin.weapons[Random.Range(0,assassin.weapons.Count)];
+        autopsy.deadAssassin = assassin.isDead;
+
+        image.sprite = spritesHolder.GetMonsterSpriteAndAnimator(MonsterCharacter.Ghost)?.sprite;
+        animator = spritesHolder.GetMonsterSpriteAndAnimator(MonsterCharacter.Ghost)?.animator;
+
+         ResizeSprite();
+         ResizeInfoPanel();
+    }
+
 
     public void ActionClick()
     {
@@ -361,6 +423,87 @@ public class Monster : MonoBehaviour
         };
 
         return sacrificeTexts[Random.Range(0, sacrificeTexts.Count)];
+    }
+
+    public static List<PlaceFeature> GetFeatures(Place place)
+    {
+        List<PlaceFeature> features = new List<PlaceFeature>();
+
+        return features;
+    }
+
+    public static List<WeaponFeature> GetFeatures(Weapon weapon)
+    {
+        List<WeaponFeature> features = new List<WeaponFeature>();
+
+        return features;
+    }
+
+    public string GetFeatureString(PlaceFeature place)
+    {
+        return System.Enum.GetName(typeof(PlaceFeature),place);
+    }
+
+    public string GetFeatureString(WeaponFeature weapon)
+    {
+          return System.Enum.GetName(typeof(WeaponFeature),weapon);
+    }
+      public string GetAnswer(Question question, Autopsy autopsy, MonsterDataObject monsterDataObj)
+    {
+
+        
+            switch(question)
+            {
+                case Question.who:
+
+                if(autopsy.deadAssassin)
+                {
+                    if(Random.value < 0.5f)
+                    {
+                        return "I was killed by another ghost";
+                    }
+                    
+                }
+
+                bool hasHands = monsterDataObj.HasHands(autopsy.character); 
+                bool hasFeet = monsterDataObj.HasFeet(autopsy.character); 
+
+                if(hasHands && hasFeet)
+                {
+                    return Random.value <= 0.5f ? "On the floor, I could see that it had " +  Game.GetColoredString("feet", game_ref.membersHighlightColor) : 
+                    "If it wasn't for his " + Game.GetColoredString("feet", game_ref.membersHighlightColor) + " , I would have make it...";
+
+                } else if( hasHands || hasFeet)
+                {
+                    if(Random.value <= 0.5f)
+
+                     return hasFeet ? "On the floor, I could see that it had " +  Game.GetColoredString("feet", game_ref.membersHighlightColor) : 
+                    "If it wasn't for his " + Game.GetColoredString("feet", game_ref.membersHighlightColor) + " , I would have make it...";
+                }
+
+
+                return "I remember it clearly, he soul is made of " + System.Enum.GetName(typeof(Element),  Monster.GetElement(autopsy.character));
+                
+
+                break;
+
+                case Question.where:
+
+                List<PlaceFeature> placeFeats = GetFeatures(autopsy.place);
+                if(placeFeats.Any())
+                return "I could say that place is " + GetFeatureString(placeFeats[Random.Range(0,placeFeats.Count)]);
+
+                break;
+
+                case Question.how:
+
+                List<WeaponFeature> weaponFeats = GetFeatures(autopsy.weapon);
+                if(weaponFeats.Any())
+                return "I could say that place is " + GetFeatureString(weaponFeats[Random.Range(0,weaponFeats.Count)]);
+
+                break;
+            }
+        return null;
     }
 
 

@@ -10,7 +10,7 @@ using Common.Enums;
 public class MonsterSpriteAndAnimator
 {
     public Sprite sprite;
-    public AnimatorOverrideController animator;
+    public Animator animator;
 }
 [CreateAssetMenu(menuName = "ScriptableObject/SpritesHolder")]
 public class SpritesHolder : ScriptableObject

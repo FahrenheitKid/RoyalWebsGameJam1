@@ -64,4 +64,28 @@ public class MonsterDataObject : ScriptableObject
     };
     
 
+    public bool HasHands(MonsterCharacter character)
+    {
+        MonsterData md = monsterList.First(x => x.monster == character);
+        if(md== null) return false;
+
+        return md.hasHands;
+    }
+
+    public bool HasFeet(MonsterCharacter character)
+    {
+        MonsterData md = monsterList.First(x => x.monster == character);
+        if(md== null) return false;
+        
+        return md.hasFeet;
+    }
+
+     public Element GetElement(MonsterCharacter character)
+    {
+        MonsterData md = monsterList.First(x => x.monster == character);
+        if(md== null) return Element.Earth;
+        
+        return Monster.GetElement(character);
+    }
+
 }
