@@ -26,16 +26,26 @@ public class MonsterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
      void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
+        print("entrei from monster" + eventData.pointerEnter.name);
         if(monster)
         {
+            monster.game_ref.HideOtherPopUps(monster);
             if(monster.useFade == false) return;
             
              if(monster.wasAsked)
-            monster.ShowBasicInfo(true);
-            else
-            {
-                monster.ShowQuestionMark(true);
-            }
+             {
+                  if(monster.isDead == false)
+                    monster.ShowBasicInfo(true);
+
+                    
+             }
+            
+                if((monster.wasInterrogated == false && monster.isDead) || ( monster.isDead == false && monster.wasAsked == false))
+                {
+                    if(monster.isQuestionPopUpOn == false)
+                    monster.ShowQuestionMark(true);
+                }
+            
 
             if(monster.game_ref.isSacrificeMode == false)
             {
@@ -50,6 +60,13 @@ public class MonsterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             {
                 monster.ShowTalkBubble(true);
             }
+            else
+            {
+                if(monster.isDead && monster.wasInterrogated)
+                {
+                    monster.ShowTalkBubbleAnswer(true);
+                }
+            }
         }
     }
 
@@ -58,14 +75,9 @@ public class MonsterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if(monster)
         {
               if(monster.useFade == false) return;
-            if(monster.wasAsked)
-            monster.ShowBasicInfo(false);
-
             
-                monster.ShowQuestionMark(false);
-
-                
-                monster.ShowTalkBubble(false);
+            if((monster.isDead && monster.isQuestionPopUpOn == true) == false)
+            monster.HideAllPopUps(monster.isSacrifice);
             
            
         }

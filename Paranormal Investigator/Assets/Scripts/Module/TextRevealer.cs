@@ -43,9 +43,13 @@ public class TextRevealer : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void RevealText()
     {
+
         if(textsQueue.Any())
         {
-            currentText = textsQueue.Dequeue();
+            loopTexts = textsQueue.Count > 1;
+            string nextText = textsQueue.Dequeue();
+            if(nextText == currentText) return;
+            currentText = nextText;
             tipsCheck = textsQueue.ToList();
             text.maxVisibleCharacters = 0;
             if(textRevealTween != null)
@@ -60,15 +64,28 @@ public class TextRevealer : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
             if(textsQueue.Any())
             autoTextTimer = Timer.Register(textsInterval, () => RevealText(),null,true);
-            if(loopTexts) textsQueue.Enqueue(currentText);
+
+            if(loopTexts && textsQueue.Any()) textsQueue.Enqueue(currentText);
         }
     }
 
     public void StopRevealing()
     {
-        
+            if(autoTextTimer != null)
             autoTextTimer.Cancel();
         
+    }
+
+    public void ClearTexts()
+    {
+        StopRevealing();
+        textsQueue = new Queue<string>();
+        if(textRevealTween != null)
+        {
+            textRevealTween.Kill();
+        }
+        currentText = "";
+
     }
     public void OnPointerDown(PointerEventData eventData)
     {

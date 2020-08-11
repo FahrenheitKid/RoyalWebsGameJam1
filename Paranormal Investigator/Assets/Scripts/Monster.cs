@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using TMPro;
-using DG.Tweening;
 using Common.Enums;
+using DG.Tweening;
+using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Common.Enums
 {
@@ -35,14 +35,14 @@ namespace Common.Enums
         TapeMeasure,
         Gouge
     }
-     public enum WeaponFeature
+    public enum WeaponFeature
     {
         Blade,
         Piercing,
         Gardening,
         Construction,
         Harmless,
-        Blunt
+        Blunt,
     }
 
     public enum Place
@@ -77,11 +77,10 @@ namespace Common.Enums
         Indoors,
         Outdoors,
         Busy,
+        Leisure,
         Calm,
         Common,
     }
-
-   
 
     public enum Element
     {
@@ -91,7 +90,8 @@ namespace Common.Enums
         Dark
     }
 
-    public enum Question{
+    public enum Question
+    {
 
         who,
         where,
@@ -156,8 +156,9 @@ public class Monster : MonoBehaviour
     public Game game_ref;
     [SerializeField]
     Button button;
-     [SerializeField]
+    [SerializeField]
     Image image;
+    [Header("Info Panel")]
     [SerializeField]
     CanvasGroup infoGroup;
     [SerializeField]
@@ -165,7 +166,13 @@ public class Monster : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI title;
     [SerializeField]
+    public string monsterName;
+    [SerializeField]
     Image titlePanel;
+
+    [Header("Questions Panel")]
+    [SerializeField]
+    CanvasGroup questionsGroup;
 
     [SerializeField]
     CanvasGroup questionMark;
@@ -175,19 +182,19 @@ public class Monster : MonoBehaviour
     CanvasGroup talkBubble;
     [SerializeField]
     TextRevealer talkText;
-     [SerializeField]
+    [SerializeField]
     Animator animator;
-     [SerializeField]
+    [SerializeField]
     FlexibleGridLayout weaponParent;
-     [SerializeField]
+    [SerializeField]
     FlexibleGridLayout placeParent;
 
     [SerializeField]
-    MonsterData monsterData;
+    public MonsterData monsterData;
     [SerializeField]
-    List<Weapon> weapons = new List<Weapon>();
+    public List<Weapon> weapons = new List<Weapon>();
     [SerializeField]
-    List<Place> places = new List<Place>();
+    public List<Place> places = new List<Place>();
     [SerializeField]
     Autopsy autopsy;
     [SerializeField]
@@ -209,6 +216,7 @@ public class Monster : MonoBehaviour
     public bool wasAsked = false;
     public bool wasInterrogated = false;
 
+    public bool isQuestionPopUpOn = false;
 
     // Start is called before the first frame update
     void Start()
@@ -217,39 +225,81 @@ public class Monster : MonoBehaviour
     }
     public void Setup()
     {
-       
-        if(!game_ref)
-        game_ref = GameObject.FindGameObjectWithTag("Game").GetComponent<Game>();
 
-        if(spritesHolder)
+        if (!game_ref)
+            game_ref = GameObject.FindGameObjectWithTag("Game").GetComponent<Game>();
+
+        ResizeSprite();
+        ResizeInfoPanel();
+    }
+
+    public void BuildCharacter(MonsterData mData, List<Weapon> _weapons, List<Place> _places, string _name)
+    {
+
+        monsterData = mData;
+        weapons = _weapons;
+        places = _places;
+        monsterName = _name;
+
+        // clear childs
+
+        foreach (Transform child in weaponParent.transform)
         {
-            foreach(Weapon wp in weapons)
+            Destroy(child);
+        }
+        foreach (Transform child in placeParent.transform)
+        {
+            Destroy(child);
+        }
+
+        if (spritesHolder)
+        {
+            foreach (Weapon wp in _weapons)
             {
                 GameObject go = spritesHolder.InstantiatePrefab(wp);
-                if(go)
+                if (go)
                 {
                     go.transform.SetParent(weaponParent.transform);
                 }
             }
 
-             foreach(Place pl in places)
+            foreach (Place pl in _places)
             {
                 GameObject go = spritesHolder.InstantiatePrefab(pl);
-                if(go)
+                if (go)
                 {
                     go.transform.SetParent(placeParent.transform);
                 }
             }
+
+            SetSprite(monsterData.monster);
+            SetName(_name);
+
         }
 
         ResizeSprite();
-         ResizeInfoPanel();
+        ResizeInfoPanel();
+
+        gameObject.name = monsterName + "(" +  System.Enum.GetName(typeof(MonsterCharacter),monsterData.monster)+ ")";
+
+    }
+
+    void SetSprite(MonsterCharacter character)
+    {
+        image.sprite = spritesHolder.GetMonsterSpriteAndAnimator(character)?.sprite;
+        animator.runtimeAnimatorController = spritesHolder.GetMonsterSpriteAndAnimator(character)?.animator;
+    }
+
+    void SetName(string _name)
+    {
+        monsterName = _name;
+        title.text = monsterName;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void ClickTest()
@@ -259,22 +309,22 @@ public class Monster : MonoBehaviour
 
     public static Element GetElement(MonsterCharacter character)
     {
-        string enumName = System.Enum.GetName(typeof(MonsterCharacter),character);
+        string enumName = System.Enum.GetName(typeof(MonsterCharacter), character);
         enumName = enumName.ToLower();
 
-        if(enumName.FirstOrDefault() == 'e')
+        if (enumName.FirstOrDefault() == 'e')
         {
             return Element.Earth;
         }
-        else if(enumName.FirstOrDefault() == 'a')
+        else if (enumName.FirstOrDefault() == 'a')
         {
             return Element.Air;
         }
-        else if(enumName.FirstOrDefault() == 'f')
+        else if (enumName.FirstOrDefault() == 'f')
         {
             return Element.Fire;
         }
-        else// if(enumName.FirstOrDefault() == 'd')
+        else // if(enumName.FirstOrDefault() == 'd')
         {
             return Element.Dark;
         }
@@ -285,33 +335,48 @@ public class Monster : MonoBehaviour
         bool weaponsBigger = Game.weaponDefaultWidth > Game.placeDefaultWidth;
         bool moreWeapons = weapons.Count > places.Count;
 
-        float cellWidth = moreWeapons ?  Game.weaponDefaultWidth : Game.placeDefaultWidth;
+        float cellWidth = moreWeapons ? Game.weaponDefaultWidth : Game.placeDefaultWidth;
 
-        if(weapons.Count == places.Count )
+        if (weapons.Count == places.Count)
         {
-            
-            cellWidth = weaponsBigger ?   Game.weaponDefaultWidth : Game.placeDefaultWidth;
-            if(weapons.Count > 1|| places.Count > 1)
+
+            cellWidth = weaponsBigger ? Game.weaponDefaultWidth : Game.placeDefaultWidth;
+            if (weapons.Count > 1 || places.Count > 1)
             {
                 cellWidth += moreWeapons ? weaponParent.spacing.x : placeParent.spacing.x;
             }
         }
 
-        infoPanel.rectTransform.sizeDelta = new Vector2( cellWidth * ((moreWeapons ? weapons.Count : places.Count) + 1.5f),Game.infoDefaultHeight);
+        infoPanel.rectTransform.sizeDelta = new Vector2(cellWidth * ((moreWeapons ? weapons.Count : places.Count) + 1.5f), Game.infoDefaultHeight);
 
-      
     }
 
     public void ResizeSprite()
     {
-       image.rectTransform.sizeDelta = new Vector2( image.sprite.rect.width,  image.sprite.rect.height)* Game.monsterSpriteSizeMultiplier;
+        image.rectTransform.sizeDelta = new Vector2(image.sprite.rect.width, image.sprite.rect.height) * Game.monsterSpriteSizeMultiplier;
 
     }
 
-    public void  ShowBasicInfo(bool on)
+    public void ShowBasicInfo(bool on)
     {
         infoGroup.DOFade(on ? 1 : 0, infoShowDuration);
         infoGroup.transform.DOLocalMoveY(on ? 0 : -50f, infoShowDuration);
+    }
+    public void ShowQuestionOptions(bool on)
+    {
+        questionsGroup.DOFade(on ? 1 : 0, infoShowDuration);
+        questionsGroup.transform.DOLocalMoveY(on ? 0 : -50f, infoShowDuration);
+        questionsGroup.blocksRaycasts = on;
+
+        foreach (GraphicRaycaster gr in questionsGroup.GetComponentsInChildren<GraphicRaycaster>(true))
+        {
+            if (gr)
+            {
+                gr.enabled = on;
+            }
+        }
+
+        isQuestionPopUpOn = on;
     }
 
     public void ShowQuestionMark(bool on)
@@ -321,102 +386,172 @@ public class Monster : MonoBehaviour
         questionMark.transform.DOLocalMoveY(on ? 0 : -50f, infoShowDuration);
     }
 
-     public void ShowExclamationMark(bool on)
+    public void ShowExclamationMark(bool on)
     {
-         exclamationMark.DOFade(on ? 1 : 0, infoShowDuration);
+        exclamationMark.DOFade(on ? 1 : 0, infoShowDuration);
         exclamationMark.transform.DOLocalMoveY(on ? 0 : -50f, infoShowDuration);
     }
 
     public void ShowTalkBubble(bool on)
     {
-        Tween t = Game.FadeGroup(talkBubble,on,infoShowDuration);
-        if(on)
-        {   
+        talkText.ClearTexts();
+        Tween t = Game.FadeGroup(talkBubble, on, infoShowDuration);
+        if (on)
+        {
             Queue<string> queue = new Queue<string>();
             queue.Enqueue(GetRandomSacrificeText());
             queue.Enqueue(GetRandomSacrificeText());
             talkText.SetQueue(queue);
-            
-        t.onComplete+= () => talkText.RevealText();
+
+            t.onComplete += () => talkText.RevealText();
         }
         else
-        t.onComplete+= () => talkText.StopRevealing();
+            t.onComplete += () => talkText.StopRevealing();
     }
 
-   
+    public void ShowTalkBubble(bool on, Queue<string> queue)
+    {
+
+        talkText.ClearTexts();
+        Tween t = Game.FadeGroup(talkBubble, on, infoShowDuration);
+        if (on)
+        {
+            talkText.SetQueue(queue);
+
+            t.onComplete += () => talkText.RevealText();
+        }
+        else
+            t.onComplete += () => talkText.StopRevealing();
+    }
+
+    public void ShowTalkBubbleAnswer(bool on)
+    {
+        Queue<string> answers = new Queue<string>();
+        answers.Enqueue(answer);
+
+        ShowTalkBubble(on, answers);
+    }
+
     public void SetSacrifice()
     {
-        if(game_ref)
+        if (game_ref && isDead == false)
         {
             game_ref.SetSacrifice(this);
         }
     }
-    public void Sacrifice(bool on)
+    public bool Sacrifice(bool on)
     {
-        if(isDead && on)
+        if (isDead && on)
         {
             print("cant be accused");
-            return;
+            return false;
         }
         else
         {
             ShowExclamationMark(on);
             ShowTalkBubble(on);
-            if(!on)
-            ShowQuestionMark(false);
+            if (!on)
+                ShowQuestionMark(false);
             isSacrifice = on;
+            return isSacrifice;
         }
     }
 
     public void Assassinate(Monster assassin)
     {
-        autopsy.place = Random.value  <= 0.5 ? assassin.places[Random.Range(0,assassin.places.Count)] : places[Random.Range(0,places.Count)];
-        autopsy.weapon = assassin.weapons[Random.Range(0,assassin.weapons.Count)];
+        autopsy.place = Random.value <= 0.5 ? assassin.places[Random.Range(0, assassin.places.Count)] : places[Random.Range(0, places.Count)];
+        autopsy.weapon = assassin.weapons[Random.Range(0, assassin.weapons.Count)];
         autopsy.deadAssassin = assassin.isDead;
+        autopsy.character = assassin.monsterData.monster;
 
-        image.sprite = spritesHolder.GetMonsterSpriteAndAnimator(MonsterCharacter.Ghost)?.sprite;
-        animator = spritesHolder.GetMonsterSpriteAndAnimator(MonsterCharacter.Ghost)?.animator;
+        isDead = true;
+        //questionMark.GetComponentInChildren<Image>().color = Color.black;
+        Sacrifice(false);
 
-         ResizeSprite();
-         ResizeInfoPanel();
+        SetSprite(MonsterCharacter.Ghost);
+        //image.sprite = spritesHolder.GetMonsterSpriteAndAnimator(MonsterCharacter.Ghost)?.sprite;
+        //animator.runtimeAnimatorController = spritesHolder.GetMonsterSpriteAndAnimator(MonsterCharacter.Ghost)?.animator;
+
+        ResizeSprite();
+        ResizeInfoPanel();
     }
-
 
     public void ActionClick()
     {
-        if(isDead == false )
+        if (isDead == false)
         {
-            if(game_ref.isSacrificeMode == true)
+            if (game_ref.isSacrificeMode == true)
             {
-                 SetSacrifice();
+                SetSacrifice();
             }
             else
             {
-                if(wasAsked == false)
+                if (wasAsked == false)
                 {
                     Ask();
-                   
+
                 }
-            }   
-           
+            }
+
         }
-        else 
+        else
         {
-            
+            if (wasInterrogated == false)
+            {
+                Interrogate();
+            }
+
         }
     }
 
-
     public void Ask()
     {
-         wasAsked = true;
-          ShowQuestionMark(false);
-          ShowBasicInfo(true);
+        if(wasAsked == true || game_ref.CanAsk() == false) return;
+        
+        game_ref.IncreaseQuestionCount(true);
+        wasAsked = true;
+        ShowQuestionMark(false);
+        ShowBasicInfo(true);
+    }
+
+    public void Interrogate()
+    {
+        //wasInterrogated = true;
+        ShowQuestionMark(false);
+        ShowQuestionOptions(true);
+
+    }
+    public void InterrogateQuestion(int question)
+    {
+         if(wasInterrogated == true || game_ref.CanInterrogate() == false) return;
+        
+        game_ref.IncreaseQuestionCount(false);
+        wasInterrogated = true;
+        Question q = (Question)question;
+        print("preessed " + (Question)question);
+        ShowQuestionOptions(false);
+
+        Queue<string> answers = new Queue<string>();
+        answer = GetAnswer(q, autopsy, monsterDataHolder);
+        answers.Enqueue(answer);
+
+        ShowTalkBubble(true, answers);
+    }
+
+    public void HideAllPopUps(bool excludeExclamationMark)
+    {
+        ShowBasicInfo(false);
+        if (exclamationMark == false)
+            ShowExclamationMark(false);
+        ShowQuestionMark(false);
+        ShowQuestionOptions(false);
+        ShowTalkBubble(false);
     }
 
     public string GetRandomSacrificeText()
     {
-        List<string> sacrificeTexts = new List<string> {
+        List<string> sacrificeTexts = new List<string>
+        {
             "Don't kill me please!!!1!",
             "Do you always solve your cases by randonly killing people?",
             "If you kill me, I'll wait for you in hell (:"
@@ -429,6 +564,78 @@ public class Monster : MonoBehaviour
     {
         List<PlaceFeature> features = new List<PlaceFeature>();
 
+        switch (place)
+        {
+
+            case Place.House:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Calm, PlaceFeature.Common, PlaceFeature.Indoors, PlaceFeature.Leisure });
+                break;
+            case Place.Barn:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Calm, PlaceFeature.Indoors, PlaceFeature.Outdoors });
+                break;
+            case Place.Building:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Busy, PlaceFeature.Common, PlaceFeature.Indoors });
+                break;
+            case Place.Stadium:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Busy, PlaceFeature.Common, PlaceFeature.Outdoors, PlaceFeature.Leisure });
+                break;
+            case Place.GasStation:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Busy, PlaceFeature.Common, PlaceFeature.Outdoors });
+                break;
+            case Place.Shop:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Busy, PlaceFeature.Common, PlaceFeature.Indoors });
+                break;
+            case Place.Bank:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Busy, PlaceFeature.Common, PlaceFeature.Indoors });
+                break;
+            case Place.Hospital:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Busy, PlaceFeature.Calm, PlaceFeature.Common, PlaceFeature.Indoors });
+                break;
+            case Place.Port:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Busy, PlaceFeature.Outdoors });
+                break;
+            case Place.Airport:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Busy, PlaceFeature.Common, PlaceFeature.Indoors });
+                break;
+            case Place.BusStop:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Busy, PlaceFeature.Common, PlaceFeature.Outdoors });
+                break;
+            case Place.Warehouse:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Busy, PlaceFeature.Indoors, PlaceFeature.Outdoors });
+                break;
+            case Place.Theater:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Busy, PlaceFeature.Calm, PlaceFeature.Common, PlaceFeature.Indoors, PlaceFeature.Leisure });
+                break;
+            case Place.Church:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Calm, PlaceFeature.Common, PlaceFeature.Indoors, PlaceFeature.Leisure });
+                break;
+            case Place.Graveyard:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Calm, PlaceFeature.Outdoors });
+                break;
+            case Place.Factory:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Busy, PlaceFeature.Indoors });
+                break;
+            case Place.NuclearPlant:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Busy, PlaceFeature.Indoors, });
+                break;
+            case Place.Castle:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Indoors, PlaceFeature.Leisure });
+                break;
+            case Place.Park:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Calm, PlaceFeature.Common, PlaceFeature.Outdoors, PlaceFeature.Leisure });
+                break;
+            case Place.Lighthouse:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Calm, PlaceFeature.Outdoors });
+                break;
+            case Place.Windmill:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Calm, PlaceFeature.Outdoors });
+                break;
+            case Place.Vulcan:
+                features.AddRange(new List<PlaceFeature> { PlaceFeature.Calm, PlaceFeature.Outdoors });
+                break;
+
+        }
+
         return features;
     }
 
@@ -436,75 +643,164 @@ public class Monster : MonoBehaviour
     {
         List<WeaponFeature> features = new List<WeaponFeature>();
 
+        switch (weapon)
+        {
+            case Weapon.Hammer:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Construction, WeaponFeature.Blunt });
+                break;
+            case Weapon.Wrench:
+                features.AddRange(new List<WeaponFeature> {  WeaponFeature.Construction, WeaponFeature.Blunt });
+                
+                break;
+            case Weapon.Backsaw:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Blade, WeaponFeature.Construction});
+                
+                break;
+            case Weapon.Scythe:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Blade, WeaponFeature.Gardening });
+                
+                break;
+            case Weapon.Shovel:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Gardening, WeaponFeature.Construction,WeaponFeature.Blunt});
+                
+                break;
+            case Weapon.Pitchfork:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Piercing, WeaponFeature.Gardening });
+                
+                break;
+            case Weapon.Knife:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Blade, WeaponFeature.Piercing });
+                
+                break;
+            case Weapon.Crowbar:
+                features.AddRange(new List<WeaponFeature> {WeaponFeature.Construction, WeaponFeature.Blunt });
+                
+                break;
+            case Weapon.Screwdriver:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Construction, WeaponFeature.Harmless, WeaponFeature.Blunt });
+                
+                break;
+            case Weapon.Axe:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Blade, WeaponFeature.Gardening });
+                
+                break;
+            case Weapon.Cleaver:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Blade});
+                
+                break;
+            case Weapon.UtilityKnife:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Blade, WeaponFeature.Piercing, WeaponFeature.Construction, });
+                
+                break;
+            case Weapon.Duster:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Harmless, WeaponFeature.Blunt });
+                
+                break;
+            case Weapon.Pickaxe:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Piercing, WeaponFeature.Construction, WeaponFeature.Blunt });
+                
+                break;
+            case Weapon.WateringCan:
+                features.AddRange(new List<WeaponFeature> {WeaponFeature.Gardening, WeaponFeature.Harmless, WeaponFeature.Blunt });
+                
+                break;
+            case Weapon.Cultivator:
+                features.AddRange(new List<WeaponFeature> {  WeaponFeature.Piercing, WeaponFeature.Gardening });
+                
+                break;
+            case Weapon.Pliers:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Blade, WeaponFeature.Piercing, WeaponFeature.Gardening, WeaponFeature.Construction});
+                
+                break;
+            case Weapon.Broom:
+                features.AddRange(new List<WeaponFeature> {  WeaponFeature.Gardening, WeaponFeature.Construction, WeaponFeature.Harmless, WeaponFeature.Blunt});
+                
+                break;
+            case Weapon.Scraper:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Construction, WeaponFeature.Harmless, WeaponFeature.Blunt });
+                
+                break;
+            case Weapon.PipeWrench:
+                features.AddRange(new List<WeaponFeature> {  WeaponFeature.Construction,WeaponFeature.Blunt });
+                
+                break;
+            case Weapon.TapeMeasure:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Construction, WeaponFeature.Harmless });
+                
+                break;
+            case Weapon.Gouge:
+                features.AddRange(new List<WeaponFeature> { WeaponFeature.Piercing,  WeaponFeature.Construction, WeaponFeature.Harmless, WeaponFeature.Blunt });
+                
+                break;
+
+        }
+
         return features;
     }
 
     public string GetFeatureString(PlaceFeature place)
     {
-        return System.Enum.GetName(typeof(PlaceFeature),place);
+        return System.Enum.GetName(typeof(PlaceFeature), place);
     }
 
     public string GetFeatureString(WeaponFeature weapon)
     {
-          return System.Enum.GetName(typeof(WeaponFeature),weapon);
+        return System.Enum.GetName(typeof(WeaponFeature), weapon);
     }
-      public string GetAnswer(Question question, Autopsy autopsy, MonsterDataObject monsterDataObj)
+    public string GetAnswer(Question question, Autopsy autopsy, MonsterDataObject monsterDataObj)
     {
 
-        
-            switch(question)
-            {
-                case Question.who:
+        switch (question)
+        {
+            case Question.who:
 
-                if(autopsy.deadAssassin)
+                if (autopsy.deadAssassin)
                 {
-                    if(Random.value < 0.5f)
+                    if (Random.value < 0.5f)
                     {
                         return "I was killed by another ghost";
                     }
-                    
+
                 }
 
-                bool hasHands = monsterDataObj.HasHands(autopsy.character); 
-                bool hasFeet = monsterDataObj.HasFeet(autopsy.character); 
+                bool hasHands = monsterDataObj.HasHands(autopsy.character);
+                bool hasFeet = monsterDataObj.HasFeet(autopsy.character);
 
-                if(hasHands && hasFeet)
+                if (hasHands && hasFeet)
                 {
-                    return Random.value <= 0.5f ? "On the floor, I could see that it had " +  Game.GetColoredString("feet", game_ref.membersHighlightColor) : 
-                    "If it wasn't for his " + Game.GetColoredString("feet", game_ref.membersHighlightColor) + " , I would have make it...";
+                    return Random.value <= 0.5f ? "On the floor, I could see that it had " + Game.GetColoredString("feet", game_ref.membersHighlightColor) :
+                        "If it wasn't for his " + Game.GetColoredString("feet", game_ref.membersHighlightColor) + " , I would have make it...";
 
-                } else if( hasHands || hasFeet)
+                }
+                else if (hasHands || hasFeet)
                 {
-                    if(Random.value <= 0.5f)
+                    if (Random.value <= 0.5f)
 
-                     return hasFeet ? "On the floor, I could see that it had " +  Game.GetColoredString("feet", game_ref.membersHighlightColor) : 
-                    "If it wasn't for his " + Game.GetColoredString("feet", game_ref.membersHighlightColor) + " , I would have make it...";
+                        return hasFeet ? "On the floor, I could see that it had " + Game.GetColoredString("feet", game_ref.membersHighlightColor) :
+                            "If it wasn't for his " + Game.GetColoredString("feet", game_ref.membersHighlightColor) + " , I would have make it...";
                 }
 
-
-                return "I remember it clearly, he soul is made of " + System.Enum.GetName(typeof(Element),  Monster.GetElement(autopsy.character));
-                
+                return "I remember it clearly, he soul is made of " +  Game.GetColoredString(System.Enum.GetName(typeof(Element), Monster.GetElement(autopsy.character)),game_ref.membersHighlightColor);
 
                 break;
 
-                case Question.where:
+            case Question.where:
 
                 List<PlaceFeature> placeFeats = GetFeatures(autopsy.place);
-                if(placeFeats.Any())
-                return "I could say that place is " + GetFeatureString(placeFeats[Random.Range(0,placeFeats.Count)]);
+                if (placeFeats.Any())
+                    return "I could say that place is kinda " + Game.GetColoredString(GetFeatureString(placeFeats[Random.Range(0, placeFeats.Count)]),game_ref.placeHighlightColor);
 
                 break;
 
-                case Question.how:
+            case Question.how:
 
                 List<WeaponFeature> weaponFeats = GetFeatures(autopsy.weapon);
-                if(weaponFeats.Any())
-                return "I could say that place is " + GetFeatureString(weaponFeats[Random.Range(0,weaponFeats.Count)]);
+                if (weaponFeats.Any())
+                    return "The weapon was very " + Game.GetColoredString(GetFeatureString(weaponFeats[Random.Range(0, weaponFeats.Count)]), game_ref.weaponHighlightColor);
 
                 break;
-            }
+        }
         return null;
     }
-
 
 }

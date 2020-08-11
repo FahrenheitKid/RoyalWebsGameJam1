@@ -25,7 +25,7 @@ MonoBehaviour:
   - monster: 3
     hasHands: 0
     hasFeet: 1
-  - monster: 3
+  - monster: 4
     hasHands: 0
     hasFeet: 1
   - monster: 5

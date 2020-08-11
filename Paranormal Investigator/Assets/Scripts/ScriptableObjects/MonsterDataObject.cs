@@ -64,6 +64,12 @@ public class MonsterDataObject : ScriptableObject
     };
     
 
+
+    public MonsterData GetMonsterData(MonsterCharacter character)
+    {
+        
+        return monsterList.FirstOrDefault(x => x.monster == character);
+    }
     public bool HasHands(MonsterCharacter character)
     {
         MonsterData md = monsterList.First(x => x.monster == character);

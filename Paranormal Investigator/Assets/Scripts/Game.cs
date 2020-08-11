@@ -23,6 +23,12 @@ public class Game : MonoBehaviour
       public static float placeDefaultWidth = 100f;
       public static float infoDefaultHeight = 450f;
       public static float monsterSpriteSizeMultiplier = 2.5f;
+
+      public static Point minMaxWeapons = new Point(1,2);
+      public static Point minMaxPlaces = new Point(1,2);
+
+      [SerializeField]
+      MonsterDataObject monsterDataObject;
     [SerializeField]
     Texture2D cursorTexture;
     [SerializeField]
@@ -49,6 +55,14 @@ public class Game : MonoBehaviour
        [SerializeField]
       public Color placeHighlightColor;
 
+      [Header("Answer Panel")]
+    [SerializeField]
+    CanvasGroup answerGroup;
+
+    [SerializeField]
+    Monster answerMonster;
+
+
 
       [Header("Game Logic")]
 
@@ -74,9 +88,13 @@ public class Game : MonoBehaviour
         [SerializeField]
          Monster currentSacrifice;
          [SerializeField]
-         int questionMAX;
+         TextMeshProUGUI questionCountText;
          [SerializeField]
-         int questionCount;
+         int questionMAX = 4;
+         [SerializeField]
+         float ghostCostPercentage = 0.5f;
+         [SerializeField]
+         int questionCount = 0;
 
          [SerializeField]
          TextMeshProUGUI clockText;
@@ -116,7 +134,34 @@ public class Game : MonoBehaviour
                 monsters.Add(m);
             }
         }
+        List<int> excludeMonsterList = new List<int>{ MonsterCharacter.Ghost.EnumToInt() };
+        List<MonsterCharacter> characters = UtilityTools.GetUniqueEnums<MonsterCharacter>(monsters.Count,excludeMonsterList);
+        List<int> namesIndex = UtilityTools.GetUniqueRandomNumbers(0,MonsterDataObject.randomNames.Count,monsters.Count);
 
+        int monsterIndex = 0;
+        while(characters.Any() && monsterIndex < monsters.Count)
+        {
+            int charIndex = Random.Range(0,characters.Count);
+
+
+           monsters[monsterIndex].BuildCharacter(monsterDataObject.GetMonsterData(characters[charIndex]),
+           UtilityTools.GetUniqueEnums<Weapon>(Random.Range(minMaxWeapons.x,minMaxWeapons.y +1 )),
+           UtilityTools.GetUniqueEnums<Place>(Random.Range(minMaxWeapons.x,minMaxWeapons.y +1)),
+           MonsterDataObject.randomNames.ElementAtOrDefault(namesIndex.ElementAtOrDefault(charIndex)));
+            
+            monsterIndex++;
+            characters.RemoveAt(charIndex);
+            namesIndex.RemoveAt(charIndex);
+            
+        }
+        /*
+
+        for(int i = 0; i < monsters.Count && i <characters.Count; i++)
+        {
+
+            monsters[i].BuildCharacter(monsterDataObject.GetMonsterData(characters[i]),null,null);
+        }
+        */
        
 
         gameClock = Timer.Register(secondsPerHour, () => {
@@ -128,10 +173,13 @@ public class Game : MonoBehaviour
                 }
                 else
                 {
-                   
-                    hours = 1;
-                    ampm = (ampm == "am") ? "pm" : "am";
+                   if(ampm == "pm" && hours >=12)
                      NightTurn();
+
+                    hours = 1;
+                    
+
+                    ampm = (ampm == "am") ? "pm" : "am";
                      
                 }
 
@@ -146,7 +194,10 @@ public class Game : MonoBehaviour
     {
          assassin = monsters[Random.Range(0,monsters.Count)];
          
-
+        if(answerMonster)
+        {
+            answerMonster.BuildCharacter(monsterDataObject.GetMonsterData(assassin.monsterData.monster),assassin.weapons,assassin.places,assassin.monsterName);
+        }
 
          if(gameClock.isPaused)
          {
@@ -154,6 +205,69 @@ public class Game : MonoBehaviour
             ampm = "am";
              gameClock.Resume();
          }
+        
+         questionCount = 0;
+         UpdateQuestionText();
+    }
+
+    public bool CanAsk()
+    {
+        if(questionCount < questionMAX)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool CanInterrogate()
+    {
+        if(Mathf.Abs(questionCount - questionMAX) >= (questionMAX * ghostCostPercentage) && questionCount < questionMAX)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void IncreaseQuestionCount(bool isAsk)
+    {
+        if(isAsk)
+        {
+            questionCount++;
+        }
+        else
+        {
+            questionCount+= Mathf.CeilToInt((float)questionMAX * ghostCostPercentage);
+        }
+
+        UpdateQuestionText();
+    }
+
+     void UpdateQuestionText()
+    {
+        int monstersCount = questionCount < questionMAX ? Mathf.Abs(questionMAX - questionCount) : 0;
+         float ghostCount = questionCount < questionMAX ? (float)Mathf.Abs(questionCount -questionMAX) / ((float)questionMAX * ghostCostPercentage) : 0;
+
+        questionCountText.text = " You can ask " + monstersCount.ToString() + " Monsters or " + Mathf.Floor(ghostCount) + " Ghosts";
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ShowAnswerMonster()
+    {
+        if(answerGroup)
+        {
+            answerGroup.gameObject.SetActive(!answerGroup.gameObject.activeSelf);
+            
+        }
     }
 
     // Update is called once per frame
@@ -173,11 +287,16 @@ public class Game : MonoBehaviour
         isPaused = true;
         gameClock.Pause();
        
+        if(monsters.Where(x => x.isDead == true).Count()>= monsters.Count)
+        {
+            print("all ded");
+            return;
+        }
 
         if(hasSacrificed == false)
         {
             currentSacrifice = assassin;
-            while(currentSacrifice == assassin)
+            while(currentSacrifice == assassin || currentSacrifice.isDead == true)
             {
                 currentSacrifice = monsters[Random.Range(0,monsters.Count)];
             }
@@ -199,9 +318,34 @@ public class Game : MonoBehaviour
         isPaused = false;
          hours = 6;
         ampm = "am"; 
+        UpdateClock();
          gameClock.Resume();
+         questionCount = 0;
+         UpdateQuestionText();
+
+         foreach(Monster m in monsters)
+         {
+             if(m)
+             {
+                 m.wasAsked = false;
+             }
+         }
 
          print("A new day Has begun");
+    }
+
+    public void HideOtherPopUps(Monster current)
+    {
+        foreach(Monster m in monsters)
+        {
+            if(m != current && m)
+            {
+                if(m.isQuestionPopUpOn)
+                {
+                    m.HideAllPopUps(m.isSacrifice);
+                }
+            }
+        }
     }
 
      public static Tween FadeImage(Image image, bool on, float fadeDuration, Vector2 normalPosition, bool forceReposition = false)
@@ -234,14 +378,23 @@ public class Game : MonoBehaviour
         {
             currentSacrifice.Sacrifice(false);
             currentSacrifice = null;
+            hasSacrificed = false;
         }
         else
         {
             if(currentSacrifice)
+            {
+                
             currentSacrifice.Sacrifice(false);
+            hasSacrificed = false;
+            }
             currentSacrifice = m;
              if(currentSacrifice)
-            currentSacrifice.Sacrifice(true);
+             {
+                 
+            
+                hasSacrificed = currentSacrifice.Sacrifice(true);
+             }
         }
 
     }

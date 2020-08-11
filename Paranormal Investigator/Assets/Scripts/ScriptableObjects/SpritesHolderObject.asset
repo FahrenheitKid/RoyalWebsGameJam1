@@ -17,94 +17,94 @@ MonoBehaviour:
     animator: {fileID: 22100000, guid: b3074ed53eb84e34f828b80e19fa6697, type: 2}
   earthKoala:
     sprite: {fileID: -6714512614828155352, guid: 1d7cd734840c76344bbd869d698cb461, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 4e2dab15432d776489804dc13982e758, type: 2}
   earthGoomba:
     sprite: {fileID: -750876277562190473, guid: f141dd453a119814eaaf9da5c7e5a2e7, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 5e20a75884838fd4c91bb8df409ef5c5, type: 2}
   earthTrunk:
     sprite: {fileID: -3577478761172276580, guid: 8fbee47e59c09dd45baf02b81cc77f1f, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 53ba8707219ca0a4a831b0f10e1ca4f0, type: 2}
   earthTree:
     sprite: {fileID: -7803868530101275431, guid: 49ba1795b15e43140b2f2f636d4291ac, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 8dc1ec0d7d5fd5f4782f0cd86dd38aad, type: 2}
   earthGolem:
     sprite: {fileID: 7557751631982109549, guid: 0ba2dc58e2d6a4e4892a073a9753f1d3, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 0b757bf6880c4a045a73c0e90f880b16, type: 2}
   earthPumpkin:
     sprite: {fileID: -5049444968750925908, guid: c4d06654ebb329d43bed5945526318a3, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: c27772d618e469a4688a8e771bcb3159, type: 2}
   earthling:
     sprite: {fileID: 3289799939252037283, guid: c480ec5377b177a4c85f1112bbaf9c92, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: d4fc201077beb5148b2f87cacee7090e, type: 2}
   earthKing:
     sprite: {fileID: -4194625136788765861, guid: fa517d4b28b603249b0438d227ef0219, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: f9560614fc5077948ba0688250ddf9a0, type: 2}
   FireSlime:
     sprite: {fileID: 5897538341832353843, guid: a06250f66c6fd504eb8caf490b06577d, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 8c6a9c3b4bc303c44a0f32cc9e5849fa, type: 2}
   fireSlima:
     sprite: {fileID: 1860378669851690261, guid: 413780aacb808094583af7ba1a7cc2d6, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 7e8d6f2b5354d8245bab60bddd03869a, type: 2}
   fireSlimaga:
     sprite: {fileID: -2284836724509633272, guid: f16274cde9899da4591e661ede947e3b, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 52f9bf0de57935647bc594d37d02c5ba, type: 2}
   fireTank:
     sprite: {fileID: 8715221140352330782, guid: 01dce0f18b98a094990bbd683481fc32, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 1fbee9ff26ab52445af663c71619eb7e, type: 2}
   ghost:
     sprite: {fileID: -7684389841996840255, guid: 70bdbf5c9682bf04d95dd2dc73a9e609, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 075229b1ab9861144a51c38c66823043, type: 2}
   fireKing:
     sprite: {fileID: -6551779922547999137, guid: 7da20d9be1c202948a6594fbd98c1d1d, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 40d5a9806a2f06244ab69d648354da25, type: 2}
   fireAlien:
     sprite: {fileID: -6807779955771370568, guid: 3173b538fe93ab94eab8e9f61d65aad2, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: e657d00c64b7d9348bba759ba8f7cc05, type: 2}
   airBird:
     sprite: {fileID: -7853281545805402564, guid: 999e3eb54f3807b4897aeb2b781d961e, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 744556001d37b5240aae829ec1e3e91f, type: 2}
   airBirda:
     sprite: {fileID: 8976353073554647925, guid: 8f45af9607c318b4db856959b11d6802, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: bd81dc9856d93024a8bdf4259f2641bf, type: 2}
   airBirdling:
     sprite: {fileID: -3183345197945042456, guid: b7f6e27eb62fba34a93e401adf20d894, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 4855db6149899bd4b9a78bd5121ce881, type: 2}
   airBirdaga:
     sprite: {fileID: -3775293951021299871, guid: b35b147c0abd3e04baf9d73233946a59, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 7397e750218fc684d9102db989094a08, type: 2}
   airEgg:
     sprite: {fileID: -1706372323301438869, guid: 72507a4bef1d8e64eab337fb0ab04529, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: a37b1830413edce4c9709c49b8ecba35, type: 2}
   airBirdaja:
     sprite: {fileID: -1004099411789305485, guid: e2cd33dd9a514da41bf121762fb33c00, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: ee660bdcda143414881b7a8f0e40c396, type: 2}
   airOwl:
     sprite: {fileID: 6516205784169378935, guid: 87655231bea374b488eb7de6dfef020f, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 09ccd1096f33ae244843efe2d00d9ab6, type: 2}
   darkSlime:
     sprite: {fileID: 7108324806527755228, guid: 1339759f1674aaa4fb74fc416074bbf4, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 562bbde1fc0d5154ebdcbac855fd4538, type: 2}
   darkPig:
     sprite: {fileID: 2685726949527276499, guid: 880c0c2cf20ab0941b4898103e2b544b, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 2728a59bb7526b14b8fcf1dcebaa9614, type: 2}
   darkBat:
     sprite: {fileID: -8178060074281500187, guid: 6032243a19b2b5f478f7f8e79a5d515a, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 64c5fdd49dfc7534aa4031fec5e849e5, type: 2}
   darkGhoul:
     sprite: {fileID: -7311031705915155868, guid: fee377c05157e4d4ab5e42d30ffc6036, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 1da267f0f24b5f144aa8172e829e8cab, type: 2}
   darkWizard:
     sprite: {fileID: 2011436507179006003, guid: e77857e986628444d8d8bf898dbb0fc6, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 5489082246a26b14596ec46fe7ab9e81, type: 2}
   darkImp:
     sprite: {fileID: 7458564499904050999, guid: 598f4152d52fb2d4cbf8bd0910ecc6e7, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 9aa03f0f33871f540b13609345f20c01, type: 2}
   darkDemon:
     sprite: {fileID: -3009501421585226413, guid: cec0ef9d4e00f7a419c30432b3e5e9f0, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: aa635d2ead751f34c8f278c04280c357, type: 2}
   darkBrain:
     sprite: {fileID: -1470005061747639898, guid: 241357a00a89907498a8702cdb46fe9e, type: 3}
-    animator: {fileID: 0}
+    animator: {fileID: 22100000, guid: 1e4ab977d748d5e4c8028738b5a762d9, type: 2}
   hammer: {fileID: 21300000, guid: 55b550f4803d50544b7ff29752732a70, type: 3}
   wrench: {fileID: 21300000, guid: 9fc6fc5b9d465054a9833132a8463757, type: 3}
   backsaw: {fileID: 21300000, guid: 583ba2b635ae2b548ae00bca0d220bfc, type: 3}

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -370,7 +371,7 @@ static public class UtilityTools
             }
         }
 
-        float r = Random.value;
+        float r = UnityEngine.Random.value;
         float s = 0f;
 
         for (i = 0; i < weights.Length; i++)
@@ -385,16 +386,65 @@ static public class UtilityTools
         return -1;
     }
 
-    public static List<int> GetUniqueRandomNumbers(int from,int to,int numberOfElement)
+    public static List<int> GetUniqueRandomNumbers(int from,int to,int numberOfElement, List<int> excludes = null)
 {
-    if(Mathf.Abs(from - to) < numberOfElement) return null;
+    int excludesCount = (excludes == null) ? 0 : excludes.Count;
+    if(excludes == null)
+    excludes = new List<int>();
+    
+    if(Mathf.Abs(from - to - excludesCount) < numberOfElement) return null;
 
     HashSet<int> numbers = new HashSet<int>();
     while (numbers.Count < numberOfElement)
     {
-        numbers.Add(Random.Range(from, to));
+        int chosenNumber = UnityEngine.Random.Range(from, to);
+        int maxCount = 1000;
+        int count = 0;
+        while(excludes.Contains(chosenNumber) && count < maxCount) 
+        {
+            chosenNumber = UnityEngine.Random.Range(from, to);
+            count++;
+        }
+
+        numbers.Add(chosenNumber);
     }
     return numbers.ToList();
+}
+public static int EnumToIntNew<TValue>(this TValue value) where TValue : System.Enum
+    => (int)(object)value;
+
+    public static int EnumToInt<TValue>(this TValue value)  where TValue : struct, System.IConvertible
+{
+    if(!typeof(TValue).IsEnum)
+    {
+        throw new System.ArgumentException(nameof(value));
+    }
+
+    return (int)(object)value;
+}
+
+public static List<T> GetUniqueEnums<T>(int amount, List<int> excludes = null)
+{
+    List<T> result = new List<T>();
+    int excludesCount = excludes == null ? 0 : excludes.Count;
+    if(typeof(T).IsEnum == false)
+    {
+        return result;
+    }
+    if(amount > System.Enum.GetValues(typeof(T)).Length || amount - excludesCount <= 0)
+    {
+        return result;
+    }
+
+    List<int> indexes = GetUniqueRandomNumbers(0,System.Enum.GetValues(typeof(T)).Length,amount,excludes);
+
+    foreach(int i in indexes)
+    {
+        result.Add( (T)System.Enum.Parse(typeof(T), i.ToString(), true));
+    }
+
+    return result;
+
 }
 
     public static bool isPointInViewport(Vector3 screenPoint) // returns true if point is inside viewport
