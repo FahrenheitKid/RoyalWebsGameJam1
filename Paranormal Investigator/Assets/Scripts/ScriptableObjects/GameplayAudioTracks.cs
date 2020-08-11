@@ -10,7 +10,7 @@ namespace Common.Enums
     {
         mainMenu,
         game,
-        shop
+        nightTime
     }
 
     public enum gameSFXs
@@ -20,37 +20,9 @@ namespace Common.Enums
         stageStart,
         stageComplete,
         stageRestart,
-        kingMove,
-        kingMissStep,
-        gemMove,
-        gemMatch,
-        gemLastMatch,
-        unlockDoor,
-        boxMove,
-        kingDownstairs,
-        kingUpstairs,
-        gateOpen,
-        leverActivate,
-        eggCracks,
-        eggHatch,
-        eggGameOver,
-        dragonFlight,
-        lavaIdle,
-        lavaDestroy,
-        movableFloorMove,
-        movableFloorSettle,
-        chainedWallActivate,
-        fragmentedFloor,
-        treadmillBeam,
-        hypnosisBackground,
-        hypnosisActivate,
-        ivyBulbDestroyed,
-        ivyDestroyed,
-        mirrorWitchLaugh,
-        mirrorActivate,
-        darknessActivate,
-        potionPickup,
-        potionConsume
+        monsterGrowl,
+        clockTicking,
+        crowdJoy,
 
     }
 
@@ -94,7 +66,7 @@ public class GameplayAudioTracks : SingletonScriptableObject<GameplayAudioTracks
     [SerializeField]
     AudioTrack menuST;
     [SerializeField]
-    AudioTrack shopST;
+    AudioTrack nightTimeST;
     [SerializeField]
     AudioTrack stageStart;
     [SerializeField]
@@ -102,78 +74,16 @@ public class GameplayAudioTracks : SingletonScriptableObject<GameplayAudioTracks
     [SerializeField]
     AudioTrack stageRestart;
     [SerializeField]
-    AudioTrack kingMove;
+    AudioTrack[] monsterGrowl;
     [SerializeField]
-    AudioTrack kingMissStep;
+    AudioTrack clockTicking;
     [SerializeField]
-    AudioTrack gemMove;
-    [SerializeField]
-    AudioTrack gemMatch;
-    [SerializeField]
-    AudioTrack gemLastMatch;
-    [SerializeField]
-    AudioTrack unlockDoor;
-
-    [Header("Gameplay Pacote 1")]
-    [SerializeField]
-    AudioTrack boxMove;
-    [SerializeField]
-    AudioTrack kingDownstairs;
-    [SerializeField]
-    AudioTrack kingUpstairs;
-    [SerializeField]
-    AudioTrack gateOpen;
-    [SerializeField]
-    AudioTrack leverActivate;
-    [SerializeField]
-    AudioTrack[] eggCracks;
-    [SerializeField]
-    AudioTrack eggHatch;
-    [SerializeField]
-    AudioTrack eggGameOver;
-    [SerializeField]
-    AudioTrack dragonFlight;
-
-    [Header("Gameplay Pacote 2")]
-    [SerializeField]
-    AudioTrack lavaIdle;
-    [SerializeField]
-    AudioTrack lavaDestroy;
-    [SerializeField]
-    AudioTrack movableFloorMove;
-    [SerializeField]
-    AudioTrack movableFloorSettle;
-    [SerializeField]
-    AudioTrack chainedWallActivate;
-    [SerializeField]
-    AudioTrack[] fragmentedFloor;
-    [SerializeField]
-    AudioTrack treadmillBeam;
-
-    [Header("Gameplay Pacote 3")]
-    [SerializeField]
-    AudioTrack hypnosisBackground;
-    [SerializeField]
-    AudioTrack hypnosisActivate;
-    [SerializeField]
-    AudioTrack ivyBulbDestroyed;
-    [SerializeField]
-    AudioTrack ivyDestroyed;
-    [SerializeField]
-    AudioTrack mirrorWitchLaugh;
-    [SerializeField]
-    AudioTrack mirrorActivate;
-     [SerializeField]
-    AudioTrack darknessActivate;
-    [SerializeField]
-    AudioTrack potionPickup;
-    [SerializeField]
-    AudioTrack potionConsume;
+    AudioTrack crowdJoy;
     
 
-    public AudioTrack GetGameSFX(gameSFXs sfx, int eggCrack_RemainingSteps = 2)
+    public AudioTrack GetGameSFX(gameSFXs sfx, int monsterIndex = 0)
     {
-        int index = eggCrack_RemainingSteps;
+        int index = monsterIndex;
         switch (sfx)
         {
 
@@ -186,84 +96,20 @@ public class GameplayAudioTracks : SingletonScriptableObject<GameplayAudioTracks
             case gameSFXs.stageRestart:
                 return stageRestart;
                 break;
-            case gameSFXs.kingMove:
-                return kingMove;
-                break;
-            case gameSFXs.kingMissStep:
-                return kingMissStep;
-                break;
-            case gameSFXs.gemMove:
-                return gemMove;
-                break;
-            case gameSFXs.gemMatch:
-                return gemMatch;
-                break;
-            case gameSFXs.gemLastMatch:
-                return gemLastMatch;
-                break;
-            case gameSFXs.unlockDoor:
-                return unlockDoor;
-                break;
+            case gameSFXs.monsterGrowl:
 
-            case gameSFXs.boxMove:
-                return boxMove;
-            case gameSFXs.kingDownstairs:
-                return kingDownstairs;
-            case gameSFXs.kingUpstairs:
-                return kingUpstairs;
-            case gameSFXs.gateOpen:
-                return gateOpen;
-            case gameSFXs.leverActivate:
-                return leverActivate;
-            case gameSFXs.eggCracks:
-
-                index = index >= eggCracks.Length ? index = eggCracks.Length - 1 : index;
+                index = index >= monsterGrowl.Length ? index = monsterGrowl.Length - 1 : index;
                 index = index < 0 ? 0 : index;
 
-                return eggCracks[index];
-            case gameSFXs.eggHatch:
-                return eggHatch;
-            case gameSFXs.eggGameOver:
-                return eggGameOver;
-            case gameSFXs.dragonFlight:
-                return dragonFlight;
-            case gameSFXs.lavaIdle:
-                return lavaIdle;
-            case gameSFXs.lavaDestroy:
-                return lavaDestroy;
-            case gameSFXs.movableFloorMove:
-                return movableFloorMove;
-            case gameSFXs.movableFloorSettle:
-                return movableFloorSettle;
-            case gameSFXs.chainedWallActivate:
-                return chainedWallActivate;
-            case gameSFXs.fragmentedFloor:
-
-                index = index >= eggCracks.Length ? index = fragmentedFloor.Length - 1 : index;
-                index = index < 0 ? 0 : index;
-
-                return fragmentedFloor[index];
-            case gameSFXs.treadmillBeam:
-                return treadmillBeam;
-
-                case gameSFXs.hypnosisBackground:
-                return hypnosisBackground;
-                case gameSFXs.hypnosisActivate:
-                return hypnosisActivate;
-                case gameSFXs.ivyBulbDestroyed:
-                return ivyBulbDestroyed;
-                case gameSFXs.ivyDestroyed:
-                return ivyDestroyed;
-                case gameSFXs.mirrorWitchLaugh:
-                return mirrorWitchLaugh;
-                case gameSFXs.mirrorActivate:
-                return mirrorActivate;
-                case gameSFXs.darknessActivate:
-                return darknessActivate;
-                case gameSFXs.potionPickup:
-                return potionPickup;
-                case gameSFXs.potionConsume:
-                return potionConsume;
+                return monsterGrowl[index];
+                break;
+            case gameSFXs.clockTicking:
+                return clockTicking;
+                break;
+            case gameSFXs.crowdJoy:
+                return crowdJoy;
+                break;
+           
 
             default:
                 return null;
@@ -280,8 +126,8 @@ public class GameplayAudioTracks : SingletonScriptableObject<GameplayAudioTracks
                 return menuST;
             case Soundtracks.game:
                 return gameST;
-            case Soundtracks.shop:
-                return shopST;
+            case Soundtracks.nightTime:
+                return nightTimeST;
         }
         return null;
     }

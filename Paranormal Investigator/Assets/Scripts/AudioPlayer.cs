@@ -283,7 +283,7 @@ public class AudioPlayer : MonoBehaviour
 
      public void PlayShopMusic()
     {
-        Play(GetMusic(Soundtracks.shop));
+        Play(GetMusic(Soundtracks.nightTime));
     }
 
     public void StopMusic()
