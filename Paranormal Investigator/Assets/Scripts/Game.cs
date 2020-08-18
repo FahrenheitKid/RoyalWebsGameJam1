@@ -47,6 +47,8 @@ public class Game : MonoBehaviour
       public Color redColor;
       [SerializeField]
       public Color brownColor;
+      [SerializeField]
+      public Color sacrificePanelColor;
 
       [SerializeField]
       public Color membersHighlightColor;
@@ -54,6 +56,12 @@ public class Game : MonoBehaviour
       public Color weaponHighlightColor;
        [SerializeField]
       public Color placeHighlightColor;
+
+      [Header("MovingPanel")]
+      [SerializeField]
+      Image movingPanel;
+      [SerializeField]
+      float sacrificeTransitionDuration;
 
       [Header("Answer Panel")]
     [SerializeField]
@@ -406,6 +414,7 @@ public class Game : MonoBehaviour
         sacrificeButtonText.color = (isSacrificeMode)  ? Color.black : brownColor;
         sacrificeButtonText.text = (isSacrificeMode) ? "Sacrifice Mode ON" : "Sacrifice Mode OFF";
         sacrificeModeButton.image.color = (isSacrificeMode) ? redColor : Color.white;
+        if(movingPanel) movingPanel.DOColor(isSacrificeMode ? sacrificePanelColor : Color.white, sacrificeTransitionDuration);
     }
 
     public static string GetColoredString(string text, Color color)
