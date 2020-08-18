@@ -1038,7 +1038,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4546095324931197711}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4546095326028980707}
@@ -1999,6 +1999,7 @@ MonoBehaviour:
   infoGroup: {fileID: 4546095324553879201}
   infoPanel: {fileID: 4546095324931197709}
   title: {fileID: 4546095325150867993}
+  monsterName: 
   titlePanel: {fileID: 4546095326357717332}
   questionsGroup: {fileID: 4653411979460456483}
   questionMark: {fileID: 2722558525318907948}

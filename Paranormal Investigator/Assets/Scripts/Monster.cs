@@ -260,6 +260,9 @@ public class Monster : MonoBehaviour
                 if (go)
                 {
                     go.transform.SetParent(weaponParent.transform);
+                    //need to reset this because of unity upgrade bug
+                    go.transform.localScale = Vector3.one;
+                    go.transform.DOLocalMoveZ(0,0);
                 }
             }
 
@@ -269,6 +272,9 @@ public class Monster : MonoBehaviour
                 if (go)
                 {
                     go.transform.SetParent(placeParent.transform);
+
+                     go.transform.localScale = Vector3.one;
+                    go.transform.DOLocalMoveZ(0,0);
                 }
             }
 
