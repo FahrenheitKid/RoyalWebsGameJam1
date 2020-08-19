@@ -318,7 +318,8 @@ public class Game : MonoBehaviour
         SetupMonsters();
         SetupNewRound();
         canvasRoot.transform.DOPunchScale(Vector3.one * 1.005f, 0.15f,5,0.5f);
-        AudioPlayer.Instance()?.Play(gameSFXs.stageRestart);
+        //AudioPlayer.Instance()?.Play(gameSFXs.stageRestart);
+
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

@@ -3411,7 +3411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8207226291095707026, guid: 36dc1bdeecb558d48bb6a4e39555d16a, type: 3}
       propertyPath: m_SortingOrder
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36dc1bdeecb558d48bb6a4e39555d16a, type: 3}
@@ -4363,7 +4363,7 @@ MonoBehaviour:
   title: {fileID: 1919802152}
   clockText: {fileID: 1826900779}
   hours: 6
-  secondsPerHour: 10
+  secondsPerHour: 4.5
   ampm: am
   isSplashOn: 1
 --- !u!4 &1586908142
