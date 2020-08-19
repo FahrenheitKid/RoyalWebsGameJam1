@@ -29,6 +29,8 @@ public class Game : MonoBehaviour
 
       [SerializeField]
       MonsterDataObject monsterDataObject;
+       [SerializeField]
+      public TextsHolder textsObject;
     [SerializeField]
     Texture2D cursorTexture;
     [SerializeField]
@@ -41,6 +43,13 @@ public class Game : MonoBehaviour
       public GameObject weaponPrefab;
       [SerializeField]
       FlexibleGridLayout monsterGridGroup;
+      [SerializeField]
+      public CanvasGroup canvasRoot;
+
+       [SerializeField]
+      public SplashScreen splashScreen;
+      [SerializeField]
+      public float shakeStrength;
       [SerializeField]
       public Color greenColor;
       [SerializeField]
@@ -66,6 +75,9 @@ public class Game : MonoBehaviour
       [Header("Answer Panel")]
     [SerializeField]
     CanvasGroup answerGroup;
+     [Header("Rules Panel")]
+    [SerializeField]
+    CanvasGroup rulesGroup;
 
     [SerializeField]
     Monster answerMonster;
@@ -103,6 +115,8 @@ public class Game : MonoBehaviour
          float ghostCostPercentage = 0.5f;
          [SerializeField]
          int questionCount = 0;
+         [SerializeField]
+         TextRevealer title;
 
          [SerializeField]
          TextMeshProUGUI clockText;
@@ -114,6 +128,8 @@ public class Game : MonoBehaviour
          string ampm = "am";
          [SerializeField]
          Timer gameClock;
+         [SerializeField]
+         public bool isSplashOn = true;
 
 
     // Start is called before the first frame update
@@ -142,26 +158,9 @@ public class Game : MonoBehaviour
                 monsters.Add(m);
             }
         }
-        List<int> excludeMonsterList = new List<int>{ MonsterCharacter.Ghost.EnumToInt() };
-        List<MonsterCharacter> characters = UtilityTools.GetUniqueEnums<MonsterCharacter>(monsters.Count,excludeMonsterList);
-        List<int> namesIndex = UtilityTools.GetUniqueRandomNumbers(0,MonsterDataObject.randomNames.Count,monsters.Count);
 
-        int monsterIndex = 0;
-        while(characters.Any() && monsterIndex < monsters.Count)
-        {
-            int charIndex = Random.Range(0,characters.Count);
-
-
-           monsters[monsterIndex].BuildCharacter(monsterDataObject.GetMonsterData(characters[charIndex]),
-           UtilityTools.GetUniqueEnums<Weapon>(Random.Range(minMaxWeapons.x,minMaxWeapons.y +1 )),
-           UtilityTools.GetUniqueEnums<Place>(Random.Range(minMaxWeapons.x,minMaxWeapons.y +1)),
-           MonsterDataObject.randomNames.ElementAtOrDefault(namesIndex.ElementAtOrDefault(charIndex)));
-            
-            monsterIndex++;
-            characters.RemoveAt(charIndex);
-            namesIndex.RemoveAt(charIndex);
-            
-        }
+        SetupMonsters();
+       
         /*
 
         for(int i = 0; i < monsters.Count && i <characters.Count; i++)
@@ -170,6 +169,11 @@ public class Game : MonoBehaviour
             monsters[i].BuildCharacter(monsterDataObject.GetMonsterData(characters[i]),null,null);
         }
         */
+
+        if(AudioPlayer.Instance())
+        {
+            sacrificeTransitionDuration = AudioPlayer.GetSFX(UISFXs.sacrificeButtonClick).AudioClip.length - 0.4f;
+        }
        
 
         gameClock = Timer.Register(secondsPerHour, () => {
@@ -196,8 +200,34 @@ public class Game : MonoBehaviour
             },null,true);
 
             SetupNewRound();
+            gameClock.Pause();
+           canvasRoot.DOFade(0,0);
+           canvasRoot.gameObject.SetActive(false);
     }
 
+     void SetupMonsters()
+    {
+         List<int> excludeMonsterList = new List<int>{ MonsterCharacter.Ghost.EnumToInt() };
+        List<MonsterCharacter> characters = UtilityTools.GetUniqueEnums<MonsterCharacter>(monsters.Count,excludeMonsterList);
+        List<int> namesIndex = UtilityTools.GetUniqueRandomNumbers(0,MonsterDataObject.randomNames.Count,monsters.Count);
+
+        int monsterIndex = 0;
+        while(characters.Any() && monsterIndex < monsters.Count)
+        {
+            int charIndex = Random.Range(0,characters.Count);
+
+
+           monsters[monsterIndex].BuildCharacter(monsterDataObject.GetMonsterData(characters[charIndex]),
+           UtilityTools.GetUniqueEnums<Weapon>(Random.Range(minMaxWeapons.x,minMaxWeapons.y +1 )),
+           UtilityTools.GetUniqueEnums<Place>(Random.Range(minMaxWeapons.x,minMaxWeapons.y +1)),
+           MonsterDataObject.randomNames.ElementAtOrDefault(namesIndex.ElementAtOrDefault(charIndex)));
+            
+            monsterIndex++;
+            characters.RemoveAt(charIndex);
+            namesIndex.RemoveAt(charIndex);
+            
+        }
+    }
     public void SetupNewRound()
     {
          assassin = monsters[Random.Range(0,monsters.Count)];
@@ -216,6 +246,25 @@ public class Game : MonoBehaviour
         
          questionCount = 0;
          UpdateQuestionText();
+          if(textsObject && title)
+          {
+                SetTitleTexts(TextsHolder.EnqueueRandomly( textsObject.randomTips ));
+          }
+    }
+
+    public void StartGame()
+    {
+        
+        canvasRoot.gameObject.SetActive(true);
+         canvasRoot.DOFade(1, 1f);
+        canvasRoot.transform.DOLocalMoveY(0, 1f);
+        gameClock.Resume();
+        
+    }
+
+    public void ShakeScreen()
+    {
+         canvasRoot.transform.DOShakePosition(0.8f,shakeStrength);
     }
 
     public bool CanAsk()
@@ -266,7 +315,11 @@ public class Game : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SetupMonsters();
+        SetupNewRound();
+        canvasRoot.transform.DOPunchScale(Vector3.one * 1.005f, 0.15f,5,0.5f);
+        AudioPlayer.Instance()?.Play(gameSFXs.stageRestart);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void ShowAnswerMonster()
@@ -274,6 +327,21 @@ public class Game : MonoBehaviour
         if(answerGroup)
         {
             answerGroup.gameObject.SetActive(!answerGroup.gameObject.activeSelf);
+            answerGroup.DOFade(answerGroup.gameObject.activeSelf ? 1 : 0, 0.5f);
+            answerGroup.transform.GetChild(0).DOLocalMoveY(answerGroup.gameObject.activeSelf ? 0 : -200f, 0.5f);
+            
+        }
+    }
+
+     public void ShowRules()
+    {
+        if(rulesGroup)
+        {
+
+            
+            rulesGroup.gameObject.SetActive(!rulesGroup.gameObject.activeSelf);
+            rulesGroup.DOFade(rulesGroup.gameObject.activeSelf ? 1 : 0, 0.5f);
+            rulesGroup.transform.GetChild(0).DOLocalMoveY(rulesGroup.gameObject.activeSelf ? 0 : -200f, 0.5f);
             
         }
     }
@@ -281,12 +349,22 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetMouseButton(0) || Input.GetMouseButton(1))
+        {
+            if(isSplashOn && splashScreen.canPressStart )
+            {
+                splashScreen.Fade(false);
+                isSplashOn = false;
+
+                this.AttachTimer(splashScreen.fadeOutDuration, StartGame);
+            }
+        }
     }
  
     private void UpdateClock()
     {
         clockText.text =  (hours == 0) ? 12.ToString("00") :hours.ToString("00") + "" + /*minutes.ToString("00") + */ " " +  ampm;
+        clockText.color = (hours >= 10 && ampm == "pm") ? redColor : brownColor;
         
     }
 
@@ -380,6 +458,22 @@ public class Game : MonoBehaviour
         
     }
 
+    public void SetTitleTexts(Queue<string> texts)
+    {
+
+        if(isSacrificeMode)
+        {
+
+        }
+
+        if(textsObject && title)
+        {
+            title.ClearTexts();
+            title.SetQueue(texts);
+            title.RevealText();
+        }
+    }
+
     public void SetSacrifice(Monster m)
     {
         if(currentSacrifice == m && m != null)
@@ -414,7 +508,28 @@ public class Game : MonoBehaviour
         sacrificeButtonText.color = (isSacrificeMode)  ? Color.black : brownColor;
         sacrificeButtonText.text = (isSacrificeMode) ? "Sacrifice Mode ON" : "Sacrifice Mode OFF";
         sacrificeModeButton.image.color = (isSacrificeMode) ? redColor : Color.white;
-        if(movingPanel) movingPanel.DOColor(isSacrificeMode ? sacrificePanelColor : Color.white, sacrificeTransitionDuration);
+        if(movingPanel) movingPanel.DOColor(isSacrificeMode ? sacrificePanelColor : Color.white,  isSacrificeMode? sacrificeTransitionDuration : sacrificeTransitionDuration /3).SetDelay( isSacrificeMode ? 0.25f : 0);
+
+        if(AudioPlayer.Instance())
+        {
+            AudioPlayer.Instance().Play(isSacrificeMode ? Soundtracks.sacrificeMode : Soundtracks.game, isSacrificeMode ? sacrificeTransitionDuration / 4 : sacrificeTransitionDuration / 6);
+        }
+
+        if(title && textsObject)
+        {
+
+            if(isSacrificeMode)
+            {
+
+                SetTitleTexts(TextsHolder.EnqueueInOrder( textsObject.sacrificeInstructions ));
+            }
+            
+            else
+            {
+                   SetTitleTexts(TextsHolder.EnqueueRandomly( textsObject.randomTips ));
+            }
+        }
+    
     }
 
     public static string GetColoredString(string text, Color color)

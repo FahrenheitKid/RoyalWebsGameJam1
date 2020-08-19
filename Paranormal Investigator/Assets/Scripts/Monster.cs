@@ -240,16 +240,20 @@ public class Monster : MonoBehaviour
         weapons = _weapons;
         places = _places;
         monsterName = _name;
+        wasAsked = false;
+        wasInterrogated = false;
+        isDead = false;
 
         // clear childs
 
-        foreach (Transform child in weaponParent.transform)
+        for(int i = weaponParent.transform.childCount - 1; i >= 0 ; i--)
         {
-            Destroy(child);
+            Destroy( weaponParent.transform.GetChild(i).gameObject);
         }
-        foreach (Transform child in placeParent.transform)
+
+         for(int i = placeParent.transform.childCount - 1; i >= 0 ; i--)
         {
-            Destroy(child);
+            Destroy( placeParent.transform.GetChild(i).gameObject);
         }
 
         if (spritesHolder)
@@ -367,6 +371,13 @@ public class Monster : MonoBehaviour
     {
         infoGroup.DOFade(on ? 1 : 0, infoShowDuration);
         infoGroup.transform.DOLocalMoveY(on ? 0 : -50f, infoShowDuration);
+        if(on)
+        {
+             if(AudioPlayer.Instance())
+            {
+                AudioPlayer.Instance().Play(UISFXs.infoPanelShowUp);
+            }
+        }
     }
     public void ShowQuestionOptions(bool on)
     {
@@ -383,13 +394,29 @@ public class Monster : MonoBehaviour
         }
 
         isQuestionPopUpOn = on;
+
+        if(on)
+        {
+             if(AudioPlayer.Instance())
+            {
+                AudioPlayer.Instance().Play(UISFXs.infoPanelShowUp);
+            }
+        }
     }
 
     public void ShowQuestionMark(bool on)
     {
+          if(on)
+        {
+            //print("play question yo");
+            AudioPlayer.Instance()?.Play(UISFXs.questionMark);
+        }
+
         //Game.FadeImage(questionMark,on,infoShowDuration, Vector2.zero);
         questionMark.DOFade(on ? 1 : 0, infoShowDuration);
         questionMark.transform.DOLocalMoveY(on ? 0 : -50f, infoShowDuration);
+
+      
     }
 
     public void ShowExclamationMark(bool on)
@@ -460,6 +487,11 @@ public class Monster : MonoBehaviour
                 ShowQuestionMark(false);
             isSacrifice = on;
             return isSacrifice;
+
+            if(on)
+            {
+                AudioPlayer.Instance()?.Play(gameSFXs.monsterDoomed);
+            }
         }
     }
 
@@ -477,9 +509,10 @@ public class Monster : MonoBehaviour
         SetSprite(MonsterCharacter.Ghost);
         //image.sprite = spritesHolder.GetMonsterSpriteAndAnimator(MonsterCharacter.Ghost)?.sprite;
         //animator.runtimeAnimatorController = spritesHolder.GetMonsterSpriteAndAnimator(MonsterCharacter.Ghost)?.animator;
-
+        AudioPlayer.Instance()?.Play(gameSFXs.monsterDeath);
         ResizeSprite();
         ResizeInfoPanel();
+       game_ref.ShakeScreen();
     }
 
     public void ActionClick()
@@ -560,8 +593,17 @@ public class Monster : MonoBehaviour
         {
             "Don't kill me please!!!1!",
             "Do you always solve your cases by randonly killing people?",
-            "If you kill me, I'll wait for you in hell (:"
+            "If you kill me, I'll wait for you in hell (:",
+            "Whatever dood, I'm already dead inside...",
+            "Yay, I always wanted to be part of a demon sacrifice for the greater good *-* ",
+            "I'm innocent! Don't do this",
+            "Are you sure about this? Because I ain't sure either",
         };
+
+        if(game_ref?.textsObject)
+        {
+            sacrificeTexts = game_ref?.textsObject.monstersSacriceTexts;
+        }
 
         return sacrificeTexts[Random.Range(0, sacrificeTexts.Count)];
     }

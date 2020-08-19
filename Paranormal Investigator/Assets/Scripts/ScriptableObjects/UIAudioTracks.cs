@@ -10,6 +10,8 @@ namespace Common.Enums
     {
 
         mouseOverMonster,
+        infoPanelShowUp,
+        questionMark,
         mouseOverButton,
         buttonClick,
         sacrificeButtonClick,
@@ -27,6 +29,12 @@ public class UIAudioTracks : SingletonScriptableObject<UIAudioTracks>
     [Header("Main Menu")]
     [SerializeField]
     AudioTrack mouseOverMonster;
+     [SerializeField]
+    AudioTrack infoPanelShowUp;
+
+    [SerializeField]
+    AudioTrack questionMark;
+
     [SerializeField]
     AudioTrack mouseOverButton;
     [SerializeField]
@@ -57,6 +65,12 @@ public class UIAudioTracks : SingletonScriptableObject<UIAudioTracks>
                 return textRevealing;
                  case UISFXs.cantAsk:
                 return cantAsk;
+
+                 case UISFXs.infoPanelShowUp:
+                return infoPanelShowUp;
+
+                  case UISFXs.questionMark:
+                return questionMark;
 
             default:
                 return null;

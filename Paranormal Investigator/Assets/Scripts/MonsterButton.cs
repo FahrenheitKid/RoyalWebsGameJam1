@@ -8,7 +8,7 @@ using TMPro;
 using DG.Tweening;
 using Common.Enums;
 
-public class MonsterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class MonsterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
    [SerializeField]
    Monster monster;
@@ -26,7 +26,7 @@ public class MonsterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
      void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
-        print("entrei from monster" + eventData.pointerEnter.name);
+       // print("entrei from monster" + eventData.pointerEnter.name);
         if(monster)
         {
             monster.game_ref.HideOtherPopUps(monster);
@@ -67,6 +67,8 @@ public class MonsterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                     monster.ShowTalkBubbleAnswer(true);
                 }
             }
+
+           
         }
     }
 
@@ -83,4 +85,41 @@ public class MonsterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        
+        if(AudioPlayer.Instance() && monster)
+        {
+
+            if((!monster.game_ref.CanAsk() && !monster.isDead && !monster.wasAsked) ||  (!monster.game_ref.CanInterrogate() && monster.isDead && !monster.wasInterrogated))
+            {
+                 AudioPlayer.Instance().Play(UISFXs.cantAsk);
+            }
+            else
+            {
+                if(monster.isDead)
+                {
+                    AudioPlayer.Instance().Play(gameSFXs.monsterGrowl);
+                }
+                else
+                {   
+                    if(monster.game_ref.isSacrificeMode)
+                    {   
+                          
+        
+                         AudioPlayer.Instance()?.Play(gameSFXs.monsterDoomed);
+        
+                    }
+                    else
+                    {
+                         
+                    AudioPlayer.Instance().Play(gameSFXs.monsterGrowl,monster.transform.GetSiblingIndex() +1);
+                    }
+                   
+                }
+            }
+           
+
+        }
+    }
 }

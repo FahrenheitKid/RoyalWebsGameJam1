@@ -26,9 +26,13 @@ public class TextRevealer : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
    Tween textRevealTween;
    [SerializeField]
    bool loopTexts = true;
+    [SerializeField]
+   bool infiniteLoops = true;
 
    bool pointerIsDown = false;
    Timer autoTextTimer;
+
+   bool fresh = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -42,30 +46,47 @@ public class TextRevealer : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     }
 
     public void RevealText()
-    {
-
-        if(textsQueue.Any())
-        {
-            loopTexts = textsQueue.Count > 1;
-            string nextText = textsQueue.Dequeue();
-            if(nextText == currentText) return;
-            currentText = nextText;
-            tipsCheck = textsQueue.ToList();
-            text.maxVisibleCharacters = 0;
-            if(textRevealTween != null)
+    {   
+         if(textRevealTween != null && !fresh)
             {
                 if(textRevealTween.IsPlaying())
                 {
                     return;
                 }
             }
-            textRevealTween = DOTween.To(()=> text.maxVisibleCharacters, x=> text.maxVisibleCharacters = x, currentText.Length, revealDuration).SetEase(Ease.Linear);
+            
+
+        if(textsQueue.Any())
+        {
+            
+            loopTexts = textsQueue.Count > 1;
+            string nextText = textsQueue.Dequeue();
+            tipsCheck = textsQueue.ToList();
+            if(nextText == currentText) return;
+            currentText = nextText;
+            
+            text.maxVisibleCharacters = 0;
+           
+            textRevealTween = DOTween.To(()=> text.maxVisibleCharacters, x=> text.maxVisibleCharacters = x, currentText.Length, revealDuration).SetEase(Ease.Linear).OnKill(()=> textRevealTween = null);
             text.text = currentText;
+             if(textsQueue.Any())
+             {
+                 textRevealTween.onComplete+= () =>
+                 {
+                     autoTextTimer = Timer.Register(textsInterval, () => {RevealText();
+                     autoTextTimer.Cancel();
+                     
+                     },null,true);
+                 };
+                  
+             }
+           
+           
 
-            if(textsQueue.Any())
-            autoTextTimer = Timer.Register(textsInterval, () => RevealText(),null,true);
+            if(loopTexts && textsQueue.Any()) textsQueue.Enqueue(nextText);
+            tipsCheck = textsQueue.ToList();
 
-            if(loopTexts && textsQueue.Any()) textsQueue.Enqueue(currentText);
+            fresh = false;
         }
     }
 
@@ -73,6 +94,8 @@ public class TextRevealer : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     {
             if(autoTextTimer != null)
             autoTextTimer.Cancel();
+
+            fresh = true;
         
     }
 
@@ -85,6 +108,7 @@ public class TextRevealer : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             textRevealTween.Kill();
         }
         currentText = "";
+        text.text = "";
 
     }
     public void OnPointerDown(PointerEventData eventData)

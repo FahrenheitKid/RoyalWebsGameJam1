@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e41a86a6427f0544ea0a6077c8384100, type: 3}
+  m_Name: GameplayAudioTracksHolder
+  m_EditorClassIdentifier: 
+  gameST:
+    audioClip: {fileID: 8300000, guid: 9e87e203adc3f99438f910929450a746, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 1
+    isSFX: 0
+  menuST:
+    audioClip: {fileID: 8300000, guid: d9bbd116e6624ed4d803583b6fc1673b, type: 3}
+    defaultVolume: 0.3
+    isLoopable: 1
+    isSFX: 0
+  nightTimeST:
+    audioClip: {fileID: 8300000, guid: ecbc831cccb343b49a0413656ac1dded, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 1
+    isSFX: 0
+  sacrificeModeST:
+    audioClip: {fileID: 8300000, guid: ecbc831cccb343b49a0413656ac1dded, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 1
+    isSFX: 0
+  stageStart:
+    audioClip: {fileID: 8300000, guid: c4f686b634bee874fbabd42457bb741f, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  monsterDoomed:
+    audioClip: {fileID: 8300000, guid: 36fe419c2e872434d90df1b29aeabda9, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  monsterDeath:
+    audioClip: {fileID: 8300000, guid: 2b66369ce3c18614b9d56f528645ad51, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  stageComplete:
+    audioClip: {fileID: 0}
+    defaultVolume: 0
+    isLoopable: 0
+    isSFX: 0
+  stageRestart:
+    audioClip: {fileID: 0}
+    defaultVolume: 0
+    isLoopable: 0
+    isSFX: 0
+  monsterGrowl:
+  - audioClip: {fileID: 8300000, guid: 5b3f8e301eed13245ae2cfeb66c35f94, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  - audioClip: {fileID: 8300000, guid: c41ae3dfdc8b08045bc6af077e6035f3, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  - audioClip: {fileID: 8300000, guid: becb71dcfb35ef942aa68997c586d123, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  - audioClip: {fileID: 8300000, guid: 0733ab29b4ae58948b4021293c5dba45, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  - audioClip: {fileID: 8300000, guid: 28e3519485ff46249b474d51842d2ab1, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  - audioClip: {fileID: 8300000, guid: f6fb06c9d48dd3047859ad59fafcc2d5, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  - audioClip: {fileID: 8300000, guid: 3644d92b2eb00e1439975939a5921001, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  - audioClip: {fileID: 8300000, guid: 2799d25efeb38db47a32f9c19a1bd53a, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  - audioClip: {fileID: 8300000, guid: a72dc4f601deec142a8d937240dbea16, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  - audioClip: {fileID: 8300000, guid: 33f7d4ee19b1c56438c0f87924b259f2, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  - audioClip: {fileID: 8300000, guid: 981b22f6a8f1682438cd3c8898e6ec5a, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  - audioClip: {fileID: 8300000, guid: 8dde803d74b95324996df17297383aef, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  - audioClip: {fileID: 8300000, guid: ef0bb7609e9f5d74793d2ea623bc9fa8, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  clockTicking:
+    audioClip: {fileID: 0}
+    defaultVolume: 0
+    isLoopable: 1
+    isSFX: 1
+  crowdJoy:
+    audioClip: {fileID: 0}
+    defaultVolume: 0
+    isLoopable: 0
+    isSFX: 1

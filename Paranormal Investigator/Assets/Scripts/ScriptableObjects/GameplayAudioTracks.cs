@@ -10,7 +10,8 @@ namespace Common.Enums
     {
         mainMenu,
         game,
-        nightTime
+        nightTime,
+        sacrificeMode
     }
 
     public enum gameSFXs
@@ -21,6 +22,8 @@ namespace Common.Enums
         stageComplete,
         stageRestart,
         monsterGrowl,
+        monsterDoomed,
+        monsterDeath,
         clockTicking,
         crowdJoy,
 
@@ -67,8 +70,15 @@ public class GameplayAudioTracks : SingletonScriptableObject<GameplayAudioTracks
     AudioTrack menuST;
     [SerializeField]
     AudioTrack nightTimeST;
+     [SerializeField]
+    AudioTrack sacrificeModeST;
     [SerializeField]
     AudioTrack stageStart;
+
+     [SerializeField]
+    AudioTrack monsterDoomed;
+     [SerializeField]
+    AudioTrack monsterDeath;
     [SerializeField]
     AudioTrack stageComplete;
     [SerializeField]
@@ -109,6 +119,14 @@ public class GameplayAudioTracks : SingletonScriptableObject<GameplayAudioTracks
             case gameSFXs.crowdJoy:
                 return crowdJoy;
                 break;
+
+                 case gameSFXs.monsterDoomed:
+                return monsterDoomed;
+                break;
+
+                    case gameSFXs.monsterDeath:
+                return monsterDeath;
+                break;
            
 
             default:
@@ -128,6 +146,8 @@ public class GameplayAudioTracks : SingletonScriptableObject<GameplayAudioTracks
                 return gameST;
             case Soundtracks.nightTime:
                 return nightTimeST;
+                   case Soundtracks.sacrificeMode:
+                return sacrificeModeST;
         }
         return null;
     }

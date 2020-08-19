@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87775514d0bc8c94e8e7ed4196c0f08b, type: 3}
+  m_Name: UIAudioTracksHolder
+  m_EditorClassIdentifier: 
+  mouseOverMonster:
+    audioClip: {fileID: 8300000, guid: 60472fe5973fc9f448661a361e8deec2, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  infoPanelShowUp:
+    audioClip: {fileID: 8300000, guid: f458defb44af36849954197941ae4441, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  questionMark:
+    audioClip: {fileID: 8300000, guid: 6c2d6fca6332ab24aaa647d195495bae, type: 3}
+    defaultVolume: 0.4
+    isLoopable: 0
+    isSFX: 1
+  mouseOverButton:
+    audioClip: {fileID: 8300000, guid: a8544375163a3e54abf8490933ef5252, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  buttonClick:
+    audioClip: {fileID: 8300000, guid: 00d4bbec9cc31f046a620afa4fd822ed, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  sacrificeButtonClick:
+    audioClip: {fileID: 8300000, guid: 6e8c36291e236f242bee8bfeb94d4be2, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  textRevealing:
+    audioClip: {fileID: 8300000, guid: c41ae3dfdc8b08045bc6af077e6035f3, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  cantAsk:
+    audioClip: {fileID: 8300000, guid: 8a0c9c79559b86b4d97c942709bd4a18, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1

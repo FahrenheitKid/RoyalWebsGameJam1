@@ -26,7 +26,7 @@ public class AudioPlayer : MonoBehaviour
     float masterMixVolume;
     float musicMixVolume;
 
-    float sfxMixVolume;
+    float sfxMixVolume; 
 
     [SerializeField]
     private AudioSource musicSource;
@@ -149,8 +149,10 @@ public class AudioPlayer : MonoBehaviour
     }
 
     //old play
-    public void Play(AudioClip _music, bool overrideMute = true)
-    {
+    public void Play(AudioClip _music, float fadeDuration = -1, bool overrideMute = true)
+    {   
+
+        if(fadeDuration <= -1) fadeDuration = musicfadeTime;
         if (!overrideMute && isMusicMuted || musicSource == null)return;
         if (!overrideMute && !isMusicMuted && musicSource.clip == _music && musicSource.isPlaying)return;
 
@@ -174,15 +176,18 @@ public class AudioPlayer : MonoBehaviour
             }
             else
             {
-                musicSource.clip = _music;
+               
                 if (musicSource.isPlaying)
                 {
-                    musicSource.DOFade(0f, musicfadeTime / 2).OnComplete(() => { musicSource.DOFade(1, musicfadeTime / 2); });
+                    musicSource.DOFade(0f, fadeDuration / 2).OnComplete(() => {  musicSource.clip = _music; 
+                    musicSource.Play();
+                    musicSource.DOFade(1, fadeDuration / 2); });
                 }
                 else
                 {
+                     musicSource.clip = _music;
                     musicSource.volume = 0;
-                    musicSource.DOFade(1, musicfadeTime);
+                    musicSource.DOFade(1, fadeDuration);
                     musicSource.Play();
                 }
 
@@ -192,7 +197,14 @@ public class AudioPlayer : MonoBehaviour
 
     }
 
-    public void Play(gameSFXs sfx, int eggCracks_RemainingSteps = 2, bool? oneShot = null)
+    public void Play(Soundtracks st, float fadeDuration = -1)
+    {
+        if(fadeDuration <= -1) fadeDuration = musicfadeTime;
+        //print("played" + sfx);
+        Play(GetMusic(st).AudioClip,fadeDuration);
+    }
+
+    public void Play(gameSFXs sfx, int eggCracks_RemainingSteps = 0, bool? oneShot = null)
     {
         //print("played" + sfx);
         if (eggCracks_RemainingSteps != 2)
@@ -205,7 +217,24 @@ public class AudioPlayer : MonoBehaviour
         Play(GetSFX(sfx), oneShot);
     }
 
-    public static AudioTrack GetSFX(gameSFXs sfx, int eggCracks_RemainingSteps = 2)
+    public void Play(IEnumerable<UISFXs> SFXs, bool? oneShot = null)
+    {
+         if(!SFXs.Any()) return;
+        foreach(var sfx in SFXs)
+        {
+            Play(sfx,oneShot);
+        }
+    }
+    public void Play(IEnumerable<gameSFXs> SFXs, int eggCracks_RemainingSteps = 2, bool? oneShot = null)
+    {
+        if(!SFXs.Any()) return;
+        foreach(var sfx in SFXs)
+        {
+            Play(sfx,eggCracks_RemainingSteps, oneShot);
+        }
+    }
+
+    public static AudioTrack GetSFX(gameSFXs sfx, int eggCracks_RemainingSteps = 0)
     {
         if (eggCracks_RemainingSteps == 2)
             return AudioPlayer.Instance()?.gameplayTracks?.GetGameSFX(sfx);
@@ -263,7 +292,7 @@ public class AudioPlayer : MonoBehaviour
         {
 
             Start();
-            Play(GetMusic(Soundtracks.game));
+            Play(GetMusic(Soundtracks.mainMenu));
         }
         else if (scene.name != Game.gameScene)
         {
@@ -285,6 +314,8 @@ public class AudioPlayer : MonoBehaviour
     {
         Play(GetMusic(Soundtracks.nightTime));
     }
+
+
 
     public void StopMusic()
     {
@@ -322,6 +353,8 @@ public class AudioPlayer : MonoBehaviour
             musicMixVolume = remapedValue;
         }
     }
+
+    
 
     public void UpdateMasterMixVolume(Slider slider)
     {
