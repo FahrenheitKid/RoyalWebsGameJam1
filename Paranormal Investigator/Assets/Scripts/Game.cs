@@ -359,6 +359,10 @@ public class Game : MonoBehaviour
                 this.AttachTimer(splashScreen.fadeOutDuration, StartGame);
             }
         }
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            UtilityTools.QuitGame();
+        }
     }
  
     private void UpdateClock()
