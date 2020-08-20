@@ -94,15 +94,24 @@ public class GuessUI : PanelUI
     {
         base.TogglePanel();
 
-        
-            foreach(GraphicRaycaster gr in weaponGroup.GetComponentsInChildren<GraphicRaycaster>(true))
+
+            foreach(MonsterBlueprint gr in weaponGroup.GetComponentsInChildren<MonsterBlueprint>(true))
             {
-                gr.enabled = isOn;
+                
+                if( gr.GetComponentInParent<GraphicRaycaster>())
+                gr.GetComponentInParent<GraphicRaycaster>().enabled = isOn;
+
+                if( gr.nameTitle.GetComponentInParent<GraphicRaycaster>())
+                 gr.nameTitle.GetComponentInParent<GraphicRaycaster>().enabled = false;
             }
 
-             foreach(GraphicRaycaster gr in monsterGroup.GetComponentsInChildren<GraphicRaycaster>(true))
+             foreach(MonsterBlueprint gr in monsterGroup.GetComponentsInChildren<MonsterBlueprint>(true))
             {
-                gr.enabled = isOn;
+                 if( gr.GetComponentInParent<GraphicRaycaster>())
+                gr.GetComponentInParent<GraphicRaycaster>().enabled = isOn;
+
+                if( gr.nameTitle.GetComponentInParent<GraphicRaycaster>())
+                 gr.nameTitle.GetComponentInParent<GraphicRaycaster>().enabled = false;
             }
 
             if(isOn)

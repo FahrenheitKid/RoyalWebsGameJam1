@@ -864,4 +864,23 @@ public class Monster : MonoBehaviour
         return null;
     }
 
+
+    public static string GetWeaponName(Weapon weapon)
+    {
+        switch(weapon)
+        {
+            case Weapon.UtilityKnife:
+            return "Utility Knife";
+            case Weapon.WateringCan:
+            return "Watering Can";
+            case Weapon.TapeMeasure:
+            return "Tape Measure";
+            case Weapon.PipeWrench:
+            return "Pipe Wrench";
+
+            default:
+            return System.Enum.GetName(typeof(Weapon),weapon);
+        }
+    }
+
 }

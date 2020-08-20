@@ -23,7 +23,7 @@ public class MonsterBlueprint : MonoBehaviour, IPointerEnterHandler, IPointerExi
     Animator animator;
 
     [SerializeField]
-    TextMeshProUGUI nameTitle;
+    public TextMeshProUGUI nameTitle;
 
      [SerializeField]
     CanvasGroup exclamationMark;
@@ -73,7 +73,7 @@ public class MonsterBlueprint : MonoBehaviour, IPointerEnterHandler, IPointerExi
           {
               weapon = weapon_;
 
-               monsterName = System.Enum.GetName(typeof(Weapon), (Weapon)weapon_);
+               monsterName = Monster.GetWeaponName((Weapon)weapon_);
            if(spritesHolder)
            {
                image.sprite = spritesHolder.GetSprite((Weapon)weapon_);
