@@ -52,3 +52,8 @@ MonoBehaviour:
     defaultVolume: 0.8
     isLoopable: 0
     isSFX: 1
+  selectGuess:
+    audioClip: {fileID: 8300000, guid: 6eed6aa71a17db74aa8982cf62557ba7, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1

@@ -16,7 +16,8 @@ MonoBehaviour:
   - Click on a monster with a question mark to get to know him more
   - Monsters already asked will always show his  info until the next night
   - The assassin will only kill at his own fav. places or the victim's
-  - 'The assassin always kills with his own weapons '
+  - 'The assassin always kills with one of his own weapons '
+  - If the assassin has more than one weapon he will use the same one until the end
   - Dead monsters don't show their basic info but answers meaningful questions
   askInstrunctions: []
   interrogationInstrunctions: []
@@ -32,3 +33,9 @@ MonoBehaviour:
   - 'Yay, I always wanted to be part of a demon sacrifice for the greater good *-* '
   - I'm innocent! Don't do this
   - Are you sure about this? Because I ain't sure either
+  guessInstructions:
+  - Click on the monster you think is the assassin to mark him as your guess
+  - Click on a marked monster to remove the mark
+  - Do the same to choose the weapon you think the assassin is using
+  - You can leave this screen and change your choices later
+  - When you're sure about your guess click the confirm button to finish the game

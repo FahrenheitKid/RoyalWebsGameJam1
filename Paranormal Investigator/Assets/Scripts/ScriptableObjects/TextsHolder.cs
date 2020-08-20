@@ -21,6 +21,9 @@ public class TextsHolder : ScriptableObject
     [SerializeField]
     public List<string> monstersSacriceTexts;
 
+     [SerializeField]
+    public List<string> guessInstructions;
+
         public static Queue<T> EnqueueInOrder<T>(List<T> list, int amount= -1)
         {
             Queue<T> result = new Queue<T>();

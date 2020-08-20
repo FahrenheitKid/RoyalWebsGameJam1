@@ -53,10 +53,10 @@ MonoBehaviour:
     isLoopable: 0
     isSFX: 0
   stageRestart:
-    audioClip: {fileID: 0}
-    defaultVolume: 0
+    audioClip: {fileID: 8300000, guid: c4ecb54492e55a246a4aa57ad8004909, type: 3}
+    defaultVolume: 0.8
     isLoopable: 0
-    isSFX: 0
+    isSFX: 1
   monsterGrowl:
   - audioClip: {fileID: 8300000, guid: 5b3f8e301eed13245ae2cfeb66c35f94, type: 3}
     defaultVolume: 0.8
@@ -116,7 +116,12 @@ MonoBehaviour:
     isLoopable: 1
     isSFX: 1
   crowdJoy:
-    audioClip: {fileID: 0}
-    defaultVolume: 0
+    audioClip: {fileID: 8300000, guid: e4386f3415fa64b41889f09f4fdf79e9, type: 3}
+    defaultVolume: 0.8
+    isLoopable: 0
+    isSFX: 1
+  crowdBoo:
+    audioClip: {fileID: 8300000, guid: 0ae7af83e80f0aa4fbee6426d3ffeb9d, type: 3}
+    defaultVolume: 0.8
     isLoopable: 0
     isSFX: 1

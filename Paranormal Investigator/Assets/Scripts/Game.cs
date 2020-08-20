@@ -28,7 +28,7 @@ public class Game : MonoBehaviour
       public static Point minMaxPlaces = new Point(1,2);
 
       [SerializeField]
-      MonsterDataObject monsterDataObject;
+      public MonsterDataObject monsterDataObject;
        [SerializeField]
       public TextsHolder textsObject;
     [SerializeField]
@@ -74,13 +74,21 @@ public class Game : MonoBehaviour
 
       [Header("Answer Panel")]
     [SerializeField]
-    CanvasGroup answerGroup;
+    PanelUI answerGroup;
      [Header("Rules Panel")]
     [SerializeField]
-    CanvasGroup rulesGroup;
+    PanelUI rulesGroup;
+    [Header("Guess Panel")]
+    [SerializeField]
+    GuessUI guessGroup;
 
     [SerializeField]
     Monster answerMonster;
+    [SerializeField]
+    MonsterBlueprint answerWeapon;
+
+    [SerializeField]
+    EndScreen endScreen;
 
 
 
@@ -102,7 +110,7 @@ public class Game : MonoBehaviour
         public bool isPaused = false;
 
         [SerializeField]
-        List<Monster> monsters = new List<Monster>();
+        public List<Monster> monsters = new List<Monster>();
         [SerializeField]
         Monster assassin;
         [SerializeField]
@@ -130,6 +138,7 @@ public class Game : MonoBehaviour
          Timer gameClock;
          [SerializeField]
          public bool isSplashOn = true;
+         public bool isPanelOn = false;
 
 
     // Start is called before the first frame update
@@ -227,6 +236,8 @@ public class Game : MonoBehaviour
             namesIndex.RemoveAt(charIndex);
             
         }
+
+        guessGroup.Setup();
     }
     public void SetupNewRound()
     {
@@ -236,13 +247,17 @@ public class Game : MonoBehaviour
         {
             answerMonster.BuildCharacter(monsterDataObject.GetMonsterData(assassin.monsterData.monster),assassin.weapons,assassin.places,assassin.monsterName);
         }
+        if(answerWeapon)
+        {
+            answerWeapon.Setup(assassin.GetWeaponOfChoice());
+        }
 
-         if(gameClock.isPaused)
-         {
+         gameClock?.Pause();
+         
              hours = 6;
             ampm = "am";
-             gameClock.Resume();
-         }
+             gameClock?.Resume();
+         
         
          questionCount = 0;
          UpdateQuestionText();
@@ -258,7 +273,7 @@ public class Game : MonoBehaviour
         canvasRoot.gameObject.SetActive(true);
          canvasRoot.DOFade(1, 1f);
         canvasRoot.transform.DOLocalMoveY(0, 1f);
-        gameClock.Resume();
+        gameClock?.Resume();
         
     }
 
@@ -315,14 +330,64 @@ public class Game : MonoBehaviour
 
     public void RestartGame()
     {
+        if(isSacrificeMode) SetSacrificeMode();
+        CloseOpenPanels();
         SetupMonsters();
         SetupNewRound();
-        canvasRoot.transform.DOPunchScale(Vector3.one * 1.005f, 0.15f,5,0.5f);
+        canvasRoot.transform.DOShakeScale( 0.15f, 0.15f,3);
         //AudioPlayer.Instance()?.Play(gameSFXs.stageRestart);
 
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    public void CloseOpenPanels()
+    {
+        if(answerGroup)
+        {
+           if(answerGroup.IsOn()) answerGroup.TogglePanel();
+        }
+
+        if(rulesGroup)
+        {
+           if(rulesGroup.IsOn()) rulesGroup.TogglePanel();
+        }
+
+        if(guessGroup)
+        {
+           if(guessGroup.IsOn()) guessGroup.TogglePanel();
+        }
+        if(endScreen)
+        {
+            if(endScreen.isOn) endScreen.Fade(false);
+        }
+
+          SetTitleTexts(TextsHolder.EnqueueRandomly( textsObject.randomTips ));
+    }
+    public bool IsAnyPanelOn()
+    {
+         if(answerGroup)
+        {
+           if(answerGroup.IsOn())return  true;
+        }
+
+        if(rulesGroup)
+        {
+           if(rulesGroup.IsOn()) return  true;
+        }
+
+        if(guessGroup)
+        {
+           if(guessGroup.IsOn()) return  true;
+        }
+
+        if(endScreen)
+        {
+              if(endScreen.isOn) return true;
+        }
+
+        return false;
+    }
+    /* 
     public void ShowAnswerMonster()
     {
         if(answerGroup)
@@ -330,7 +395,18 @@ public class Game : MonoBehaviour
             answerGroup.gameObject.SetActive(!answerGroup.gameObject.activeSelf);
             answerGroup.DOFade(answerGroup.gameObject.activeSelf ? 1 : 0, 0.5f);
             answerGroup.transform.GetChild(0).DOLocalMoveY(answerGroup.gameObject.activeSelf ? 0 : -200f, 0.5f);
-            
+            isPanelOn = answerGroup.gameObject.activeSelf;
+        }
+    }
+
+      public void ShowGuessPanel()
+    {
+        if(guessGroup)
+        {
+            guessGroup.gameObject.SetActive(!guessGroup.gameObject.activeSelf);
+            guessGroup.DOFade(guessGroup.gameObject.activeSelf ? 1 : 0, 0.5f);
+            guessGroup.transform.GetChild(0).DOLocalMoveY(guessGroup.gameObject.activeSelf ? 0 : -200f, 0.5f);
+            isPanelOn = guessGroup.gameObject.activeSelf;
         }
     }
 
@@ -343,9 +419,9 @@ public class Game : MonoBehaviour
             rulesGroup.gameObject.SetActive(!rulesGroup.gameObject.activeSelf);
             rulesGroup.DOFade(rulesGroup.gameObject.activeSelf ? 1 : 0, 0.5f);
             rulesGroup.transform.GetChild(0).DOLocalMoveY(rulesGroup.gameObject.activeSelf ? 0 : -200f, 0.5f);
-            
+            isPanelOn = rulesGroup.gameObject.activeSelf;
         }
-    }
+    } */
 
     // Update is called once per frame
     void Update()
@@ -362,8 +438,13 @@ public class Game : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            UtilityTools.QuitGame();
+          QuitGame();
         }
+    }
+
+    public void QuitGame()
+    {
+          UtilityTools.QuitGame();
     }
  
     private void UpdateClock()
@@ -377,7 +458,8 @@ public class Game : MonoBehaviour
     {
         isPaused = true;
         gameClock.Pause();
-       
+
+
         if(monsters.Where(x => x.isDead == true).Count()>= monsters.Count)
         {
             print("all ded");
@@ -387,11 +469,21 @@ public class Game : MonoBehaviour
         if(hasSacrificed == false)
         {
             currentSacrifice = assassin;
-            while(currentSacrifice == assassin || currentSacrifice.isDead == true)
+            if(monsters.Where(x => x.isDead == true).Count() == monsters.Count - 1)
+            {
+                currentSacrifice = monsters.Find(x => x.isDead == false);
+                EndGame();
+                return;
+            }
+            else
+            {
+                while(currentSacrifice == assassin || currentSacrifice.isDead == true)
             {
                 currentSacrifice = monsters[Random.Range(0,monsters.Count)];
             }
 
+            }
+            
         }
 
         currentSacrifice.Assassinate(assassin);
@@ -399,9 +491,47 @@ public class Game : MonoBehaviour
         hasSacrificed = false;
 
 
+        if(monsters.Where(x => x.isDead == true).Count()>= monsters.Count)
+        {
+            print("all ded");
+            if(endScreen)
+            {
+              EndGame();
+            }
+            return;
+        }
+
+
         DayReveal();
 
     }
+
+    public bool? GetVictoryStatus()
+    {
+        int count = 0;
+
+        if(!guessGroup || !assassin) return false;
+
+
+        if(guessGroup?.chosenMonster?.monsterName == assassin.monsterName &&
+        guessGroup?.chosenMonster?.monster == assassin.monsterData.monster)count++;
+
+        if(guessGroup?.chosenWeapon?.weapon == assassin.GetWeaponOfChoice())count++;
+
+        if(count >= 2) return true;
+
+        if(count  <= 0) return false;
+        else return null;
+        
+
+    }
+
+    public void EndGame()
+    {
+        CloseOpenPanels();
+          endScreen.ShowEndScreen(GetVictoryStatus());
+    }
+
 
     public void DayReveal()
     {
@@ -437,6 +567,11 @@ public class Game : MonoBehaviour
                 }
             }
         }
+    }
+
+    public Monster GetAssassin()
+    {
+        return assassin;
     }
 
      public static Tween FadeImage(Image image, bool on, float fadeDuration, Vector2 normalPosition, bool forceReposition = false)

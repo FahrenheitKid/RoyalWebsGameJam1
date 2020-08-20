@@ -26,6 +26,7 @@ namespace Common.Enums
         monsterDeath,
         clockTicking,
         crowdJoy,
+        crowdBoo,
 
     }
 
@@ -89,6 +90,8 @@ public class GameplayAudioTracks : SingletonScriptableObject<GameplayAudioTracks
     AudioTrack clockTicking;
     [SerializeField]
     AudioTrack crowdJoy;
+    [SerializeField]
+    AudioTrack crowdBoo;
     
 
     public AudioTrack GetGameSFX(gameSFXs sfx, int monsterIndex = 0)
@@ -126,6 +129,9 @@ public class GameplayAudioTracks : SingletonScriptableObject<GameplayAudioTracks
 
                     case gameSFXs.monsterDeath:
                 return monsterDeath;
+
+                case gameSFXs.crowdBoo:
+                return crowdBoo;
                 break;
            
 

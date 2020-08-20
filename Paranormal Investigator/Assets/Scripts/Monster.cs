@@ -218,6 +218,8 @@ public class Monster : MonoBehaviour
 
     public bool isQuestionPopUpOn = false;
 
+    Weapon weaponOfChoice;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -291,7 +293,18 @@ public class Monster : MonoBehaviour
         ResizeInfoPanel();
 
         gameObject.name = monsterName + "(" +  System.Enum.GetName(typeof(MonsterCharacter),monsterData.monster)+ ")";
+        weaponOfChoice = weapons[Random.Range(0, weapons.Count)];
 
+    }
+
+    public Weapon GetWeaponOfChoice()
+    {
+        return weaponOfChoice;
+    }
+
+    public void RandomizeWeaponOfChoice()
+    {
+          weaponOfChoice = weapons[Random.Range(0, weapons.Count)];
     }
 
     void SetSprite(MonsterCharacter character)
@@ -498,7 +511,7 @@ public class Monster : MonoBehaviour
     public void Assassinate(Monster assassin)
     {
         autopsy.place = Random.value <= 0.5 ? assassin.places[Random.Range(0, assassin.places.Count)] : places[Random.Range(0, places.Count)];
-        autopsy.weapon = assassin.weapons[Random.Range(0, assassin.weapons.Count)];
+        autopsy.weapon = assassin.GetWeaponOfChoice();
         autopsy.deadAssassin = assassin.isDead;
         autopsy.character = assassin.monsterData.monster;
 

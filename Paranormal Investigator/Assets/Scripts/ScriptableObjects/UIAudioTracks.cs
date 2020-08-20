@@ -16,7 +16,8 @@ namespace Common.Enums
         buttonClick,
         sacrificeButtonClick,
         textRevealing,
-        cantAsk
+        cantAsk,
+        selectGuess
 
     }
 
@@ -46,6 +47,8 @@ public class UIAudioTracks : SingletonScriptableObject<UIAudioTracks>
     AudioTrack textRevealing;
     [SerializeField]
     AudioTrack cantAsk;
+     [SerializeField]
+    AudioTrack selectGuess;
 
     public AudioTrack GetUISFX(UISFXs sfx)
     {
@@ -71,6 +74,9 @@ public class UIAudioTracks : SingletonScriptableObject<UIAudioTracks>
 
                   case UISFXs.questionMark:
                 return questionMark;
+
+                 case UISFXs.selectGuess:
+                return selectGuess;
 
             default:
                 return null;

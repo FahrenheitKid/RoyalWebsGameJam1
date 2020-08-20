@@ -26,9 +26,11 @@ public class MonsterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
      void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
+        
        // print("entrei from monster" + eventData.pointerEnter.name);
         if(monster)
         {
+            if(monster.game_ref.IsAnyPanelOn()) return;
             monster.game_ref.HideOtherPopUps(monster);
             if(monster.useFade == false) return;
             
@@ -76,6 +78,7 @@ public class MonsterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if(monster)
         {
+                if(monster.game_ref.IsAnyPanelOn()) return;
               if(monster.useFade == false) return;
             
             if((monster.isDead && monster.isQuestionPopUpOn == true) == false)
@@ -90,6 +93,7 @@ public class MonsterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         
         if(AudioPlayer.Instance() && monster)
         {
+                    if(monster.game_ref.IsAnyPanelOn()) return;
 
             if((!monster.game_ref.CanAsk() && !monster.isDead && !monster.wasAsked) ||  (!monster.game_ref.CanInterrogate() && monster.isDead && !monster.wasInterrogated))
             {

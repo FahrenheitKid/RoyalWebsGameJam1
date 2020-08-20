@@ -35,7 +35,10 @@ public class SplashScreen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+         #if UNITY_EDITOR
+            fadeInDuration = 0.1f;
+            fadeOutDuration = fadeInDuration / 3;
+         #endif
         canPressStart = false;
         Fade(true);
     }
